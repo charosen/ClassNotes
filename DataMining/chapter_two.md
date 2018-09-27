@@ -10,7 +10,7 @@
     3. 文档数据document data：即第一手、纯文本、原始数据；
         PS: 可以将文档数据转换成词频向量(term-frequency vector)，通过每个词的词频可以一定程度判断数据类型；
 
-      ![文档数据转换词频向量](./img/document2term_frequency_vector.png)
+          ![文档数据转换词频向量](./img/document2term_frequency_vector.png)
     4. 事务数据transaction data：略
 
 2. 图与网络数据graph and network：略
