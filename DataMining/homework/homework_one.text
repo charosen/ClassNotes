@@ -13,7 +13,7 @@
 \documentclass[11pt]{article}
 
 
-
+    % 中文输出支持
     \usepackage{ctex}
 
     \usepackage[T1]{fontenc}
