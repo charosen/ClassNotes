@@ -1,19 +1,21 @@
 
 % Default to the notebook output style
 
-    
+
 
 
 % Inherit from the specified cell style.
 
 
 
+%!TEX program = xelatex
 
-    
 \documentclass[11pt]{article}
 
-    
-    
+
+
+    \usepackage{ctex}
+
     \usepackage[T1]{fontenc}
     % Nicer default font (+ math font) than Computer Modern for most use cases
     \usepackage{mathpazo}
@@ -38,7 +40,7 @@
     \DeclareCaptionLabelFormat{nolabel}{}
     \captionsetup{labelformat=nolabel}
 
-    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{adjustbox} % Used to constrain images to a maximum size
     \usepackage{xcolor} % Allow colors to be defined
     \usepackage{enumerate} % Needed for markdown enumerations to work
     \usepackage{geometry} % Used to adjust the document margins
@@ -54,8 +56,8 @@
     \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
     \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
     \usepackage{fancyvrb} % verbatim replacement that allows latex
-    \usepackage{grffile} % extends the file name processing of package graphics 
-                         % to support a larger range 
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
     % The hyperref package gives us a pdf with properly built
     % internal navigation ('pdf bookmarks' for the table of contents,
     % internal cross-reference links, web links for URLs, etc.)
@@ -65,10 +67,10 @@
     \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
     \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
                                 % normalem makes italics be italics, not underlines
-    
 
-    
-    
+
+
+
     % Colors for the hyperref package
     \definecolor{urlcolor}{rgb}{0,.145,.698}
     \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
@@ -113,7 +115,7 @@
     \newcommand{\RegionMarkerTok}[1]{{#1}}
     \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
     \newcommand{\NormalTok}[1]{{#1}}
-    
+
     % Additional commands for more recent versions of Pandoc
     \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
     \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
@@ -132,8 +134,8 @@
     \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
     \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
     \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
-    
-    
+
+
     % Define a nice break command that doesn't care if a line doesn't already
     % exist.
     \def\br{\hspace*{\fill} \\* }
@@ -142,12 +144,12 @@
     \def\lt{<}
     % Document parameters
     \title{homework\_one}
-    
-    
-    
+
+
+
 
     % Pygments definitions
-    
+
 \makeatletter
 \def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
     \let\PY@ul=\relax \let\PY@tc=\relax%
@@ -255,9 +257,9 @@
 
 
 
-    
+
     % Prevent overflowing lines due to hard-to-break entities
-    \sloppy 
+    \sloppy
     % Setup hyperref package
     \hypersetup{
       breaklinks=true,  % so long urls are correctly broken across lines
@@ -267,19 +269,19 @@
       citecolor=citecolor,
       }
     % Slightly bigger margins than the latex defaults
-    
+
     \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
-    
-    
+
+
 
     \begin{document}
-    
-    
-    \maketitle
-    
-    
 
-    
+
+    \maketitle
+
+
+
+
     \hypertarget{aux7b54ux6848}{%
 \subsection{1.(a)答案：}\label{aux7b54ux6848}}
 
@@ -287,22 +289,22 @@
 {\color{incolor}In [{\color{incolor}2}]:} \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
         \PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
-        
+
         \PY{c+c1}{\PYZsh{} 价格、重量原始数据}
         \PY{n}{price} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{5.89}\PY{p}{,} \PY{l+m+mf}{49.59}\PY{p}{,} \PY{l+m+mf}{59.98}\PY{p}{,} \PY{l+m+mi}{159}\PY{p}{,} \PY{l+m+mf}{17.99}\PY{p}{,} \PY{l+m+mf}{56.99}\PY{p}{,} \PY{l+m+mf}{82.75}\PY{p}{,} \PY{l+m+mf}{142.19}\PY{p}{,} \PY{l+m+mi}{31}\PY{p}{,} \PY{l+m+mf}{125.5}\PY{p}{,}
                  \PY{l+m+mf}{4.5}\PY{p}{,} \PY{l+m+mi}{22}\PY{p}{,} \PY{l+m+mf}{52.9}\PY{p}{,} \PY{l+m+mi}{61}\PY{p}{,} \PY{l+m+mf}{33.5}\PY{p}{,} \PY{l+m+mi}{328}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mf}{142.19}\PY{p}{,} \PY{l+m+mi}{229}\PY{p}{,} \PY{l+m+mf}{189.4}\PY{p}{]}\PY{p}{)}
-        
+
         \PY{n}{weight} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{1.4}\PY{p}{,} \PY{l+m+mf}{1.5}\PY{p}{,} \PY{l+m+mf}{2.2}\PY{p}{,} \PY{l+m+mf}{2.7}\PY{p}{,} \PY{l+m+mf}{3.2}\PY{p}{,} \PY{l+m+mf}{3.9}\PY{p}{,} \PY{l+m+mf}{4.1}\PY{p}{,} \PY{l+m+mf}{4.1}\PY{p}{,} \PY{l+m+mf}{4.6}\PY{p}{,} \PY{l+m+mf}{4.8}\PY{p}{,}
                   \PY{l+m+mf}{4.9}\PY{p}{,} \PY{l+m+mf}{5.3}\PY{p}{,} \PY{l+m+mf}{5.5}\PY{p}{,} \PY{l+m+mf}{5.8}\PY{p}{,} \PY{l+m+mf}{6.2}\PY{p}{,} \PY{l+m+mf}{8.9}\PY{p}{,} \PY{l+m+mf}{11.6}\PY{p}{,} \PY{l+m+mi}{18}\PY{p}{,} \PY{l+m+mf}{22.9}\PY{p}{,} \PY{l+m+mf}{38.2}\PY{p}{]}\PY{p}{)}
         \PY{c+c1}{\PYZsh{} 四分位数定义}
         \PY{n}{quartile} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{50}\PY{p}{,} \PY{l+m+mi}{75}\PY{p}{]}\PY{p}{)}
-        
-        
-        
+
+
+
         \PY{c+c1}{\PYZsh{} 计算价格、重量的四分位数}
         \PY{n}{price\PYZus{}q1}\PY{p}{,} \PY{n}{price\PYZus{}median}\PY{p}{,} \PY{n}{price\PYZus{}q3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{percentile}\PY{p}{(}\PY{n}{price}\PY{p}{,} \PY{n}{quartile}\PY{p}{)}
         \PY{n}{weight\PYZus{}q1}\PY{p}{,} \PY{n}{weight\PYZus{}median}\PY{p}{,} \PY{n}{weight\PYZus{}q3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{percentile}\PY{p}{(}\PY{n}{weight}\PY{p}{,} \PY{n}{quartile}\PY{p}{)}
-        
+
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price的四分位数 Q1, MEDIAN, Q3 =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{price\PYZus{}q1}\PY{p}{,} \PY{n}{price\PYZus{}median}\PY{p}{,} \PY{n}{price\PYZus{}q3}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weight的四分位数 Q1, MEDIAN, Q3 =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{weight\PYZus{}q1}\PY{p}{,} \PY{n}{weight\PYZus{}median}\PY{p}{,} \PY{n}{weight\PYZus{}q3}\PY{p}{)}
 \end{Verbatim}
@@ -321,7 +323,7 @@ weight的四分位数 Q1, MEDIAN, Q3 = 3.7249999999999996 4.85 6.875
 {\color{incolor}In [{\color{incolor}3}]:} \PY{c+c1}{\PYZsh{} 排序数据}
         \PY{n}{data} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{column\PYZus{}stack}\PY{p}{(}\PY{p}{(}\PY{n+nb}{sorted}\PY{p}{(}\PY{n}{price}\PY{p}{)}\PY{p}{,} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{weight}\PY{p}{)}\PY{p}{)}\PY{p}{)}
         \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weight}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
-        
+
         \PY{c+c1}{\PYZsh{} 绘制Q\PYZhy{}Q图}
         \PY{n}{sns}\PY{o}{.}\PY{n}{set\PYZus{}style}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{darkgrid}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
         \PY{n}{sns}\PY{o}{.}\PY{n}{scatterplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weight}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,} \PY{n}{sizes}\PY{o}{=}\PY{l+m+mi}{80}\PY{p}{)}
@@ -331,12 +333,12 @@ weight的四分位数 Q1, MEDIAN, Q3 = 3.7249999999999996 4.85 6.875
 \begin{Verbatim}[commandchars=\\\{\}]
 {\color{outcolor}Out[{\color{outcolor}3}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x117d7c0f0>
 \end{Verbatim}
-            
+
     \begin{center}
     \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_3_1.png}
     \end{center}
     { \hspace*{\fill} \\}
-    
+
     \hypertarget{cux7b54ux6848}{%
 \subsection{1.(c)答案：}\label{cux7b54ux6848}}
 
@@ -344,11 +346,11 @@ weight的四分位数 Q1, MEDIAN, Q3 = 3.7249999999999996 4.85 6.875
 {\color{incolor}In [{\color{incolor}4}]:} \PY{n}{p\PYZus{}min}\PY{p}{,} \PY{n}{p\PYZus{}max} \PY{o}{=} \PY{n+nb}{min}\PY{p}{(}\PY{n}{price}\PY{p}{)}\PY{p}{,} \PY{n+nb}{max}\PY{p}{(}\PY{n}{price}\PY{p}{)}
         \PY{n}{w\PYZus{}min}\PY{p}{,} \PY{n}{w\PYZus{}max} \PY{o}{=} \PY{n+nb}{min}\PY{p}{(}\PY{n}{weight}\PY{p}{)}\PY{p}{,} \PY{n+nb}{max}\PY{p}{(}\PY{n}{weight}\PY{p}{)}
         \PY{n}{new\PYZus{}min}\PY{p}{,} \PY{n}{new\PYZus{}max} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{10}
-        
+
         \PY{n}{price\PYZus{}normalized} \PY{o}{=} \PY{p}{[}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{n}{p\PYZus{}min}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{p\PYZus{}max} \PY{o}{\PYZhy{}} \PY{n}{p\PYZus{}min}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{new\PYZus{}max} \PY{o}{\PYZhy{}} \PY{n}{new\PYZus{}min}\PY{p}{)} \PY{o}{+} \PY{n}{new\PYZus{}min} \PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n}{price}\PY{p}{]}
         \PY{n}{weight\PYZus{}normalized} \PY{o}{=} \PY{p}{[}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{n}{w\PYZus{}min}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{w\PYZus{}max} \PY{o}{\PYZhy{}} \PY{n}{w\PYZus{}min}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{new\PYZus{}max} \PY{o}{\PYZhy{}} \PY{n}{new\PYZus{}min}\PY{p}{)} \PY{o}{+} \PY{n}{new\PYZus{}min} \PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n}{weight}\PY{p}{]}
-        
-        
+
+
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{规范化price：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{price\PYZus{}normalized}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{规范化weight：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{weight\PYZus{}normalized}\PY{p}{)}
@@ -367,7 +369,7 @@ weight的四分位数 Q1, MEDIAN, Q3 = 3.7249999999999996 4.85 6.875
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}5}]:} \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k}{import} \PY{n}{pearsonr}
-        
+
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pearson互相关系数计算一：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{pearsonr}\PY{p}{(}\PY{n}{price}\PY{p}{,} \PY{n}{weight}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 
@@ -402,27 +404,27 @@ pearson互相关系数计算二： 0.5363070272140884
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}7}]:} \PY{c+c1}{\PYZsh{} 第二题}
-        
+
         \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{1.4}\PY{p}{,} \PY{l+m+mf}{1.6}\PY{p}{]}\PY{p}{)}
         \PY{n}{dataset} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{l+m+mf}{1.7}\PY{p}{]}\PY{p}{,}
                    \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mf}{1.9}\PY{p}{]}\PY{p}{,}
                    \PY{p}{[}\PY{l+m+mf}{1.6}\PY{p}{,} \PY{l+m+mf}{1.8}\PY{p}{]}\PY{p}{,}
                    \PY{p}{[}\PY{l+m+mf}{1.2}\PY{p}{,} \PY{l+m+mf}{1.5}\PY{p}{]}\PY{p}{,}
                    \PY{p}{[}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{]}\PY{p}{]}\PY{p}{)}
-        
-        
+
+
         \PY{c+c1}{\PYZsh{} 各数据点欧式距离}
         \PY{n}{euc\PYZus{}dist} \PY{o}{=} \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{x}\PY{o}{\PYZhy{}}\PY{n}{data}\PY{p}{)} \PY{k}{for} \PY{n}{data} \PY{o+ow}{in} \PY{n}{dataset}\PY{p}{]}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{各数据点欧式距离:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{euc\PYZus{}dist}\PY{p}{)}
-        
+
         \PY{c+c1}{\PYZsh{} 各数据点曼哈顿距离}
         \PY{n}{man\PYZus{}dist} \PY{o}{=} \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{x}\PY{o}{\PYZhy{}}\PY{n}{data}\PY{p}{,} \PY{n+nb}{ord}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)} \PY{k}{for} \PY{n}{data} \PY{o+ow}{in} \PY{n}{dataset}\PY{p}{]}
-        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{各数据点曼哈顿距离:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{man\PYZus{}dist}\PY{p}{)}  
-        
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{各数据点曼哈顿距离:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{man\PYZus{}dist}\PY{p}{)}
+
         \PY{c+c1}{\PYZsh{} 各数据点上确界距离}
         \PY{n}{sup\PYZus{}dist} \PY{o}{=} \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{x}\PY{o}{\PYZhy{}}\PY{n}{data}\PY{p}{,} \PY{n+nb}{ord}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{inf}\PY{p}{)} \PY{k}{for} \PY{n}{data} \PY{o+ow}{in} \PY{n}{dataset}\PY{p}{]}
-        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{各数据点上确界距离:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sup\PYZus{}dist}\PY{p}{)}  
-        
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{各数据点上确界距离:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sup\PYZus{}dist}\PY{p}{)}
+
         \PY{c+c1}{\PYZsh{} 各数据点上的余弦相似度}
         \PY{n}{cos\PYZus{}dist} \PY{o}{=} \PY{p}{[}\PY{n+nb}{float}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{data}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)} \PY{k}{for} \PY{n}{data} \PY{o+ow}{in} \PY{n}{dataset}\PY{p}{]}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{各数据点余弦相似度:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{cos\PYZus{}dist}\PY{p}{)}
@@ -444,16 +446,16 @@ pearson互相关系数计算二： 0.5363070272140884
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}11}]:} \PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k}{import} \PY{n}{preprocessing}
-         
-         
+
+
          \PY{n}{x\PYZus{}normalized} \PY{o}{=} \PY{n}{preprocessing}\PY{o}{.}\PY{n}{normalize}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mf}{1.4}\PY{p}{,} \PY{l+m+mf}{1.6}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{norm}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{l2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
          \PY{n}{dataset\PYZus{}normalized} \PY{o}{=} \PY{n}{preprocessing}\PY{o}{.}\PY{n}{normalize}\PY{p}{(}\PY{n}{dataset}\PY{p}{,} \PY{n}{norm}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{l2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
+
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{归一化数据点x：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{x\PYZus{}normalized}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{归一化数据集x1, x2, x3, x4, x5：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{dataset\PYZus{}normalized}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-         
+
          \PY{c+c1}{\PYZsh{} 各数据点欧式距离}
          \PY{n}{euc\PYZus{}dist} \PY{o}{=} \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{x\PYZus{}normalized}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{data}\PY{p}{)} \PY{k}{for} \PY{n}{data} \PY{o+ow}{in} \PY{n}{dataset\PYZus{}normalized}\PY{p}{]}
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{各数据点欧式距离:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{euc\PYZus{}dist}\PY{p}{)}
@@ -476,7 +478,7 @@ pearson互相关系数计算二： 0.5363070272140884
 
 
     % Add a bibliography block to the postdoc
-    
-    
-    
+
+
+
     \end{document}
