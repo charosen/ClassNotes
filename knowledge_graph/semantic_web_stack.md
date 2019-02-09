@@ -1,0 +1,176 @@
+<h1>知识图谱理论篇（四）--语义网技术栈（Semantic Web Stack）</h1>
+
+本文将主要讲解知识图谱存储、知识图谱的形式化表示、知识图谱本体构建。
+
+<h2>1. 知识图谱的存储</h2>
+
+在之前的[知识图谱理论篇(一)--知识图谱构建技术综述](https://github.com/charosen/ClassNotes/blob/master/knowledge_graph/Knowledge_Graph_Construction_Techniques.md)中，我们就介绍过知识图谱的定义和逻辑分层：
+
+> **定义**：知识图谱是结构化的语义知识库，是以“实体-关系-实体”或“实体-属性-属性值”三元组为基本单位构成的网络；
+
+> **逻辑分层**：
+> 1. 模式层：存储经过提炼的知识，使用本体（本体支持公理、规则、约束条件）来规范实体、实体属性、实体关系等对象；
+> 2. 数据层：知识以事实为单位存储在数据库中，事实的基本表示方式是三元组；
+
+可见，知识图谱是以三元组为基本单位存储在数据库中。在实践中，主流的方法是将三元组存储在图数据库或普通数据库中。
+
+对于图数据库中存储的知识图谱，常用的图数据库为Neo4j，并使用Cypher语句从知识图谱中查询知识；
+
+对于普通数据库中存储的知识图谱，常用SPARQL语句从知识图谱中查询知识；
+
+<h2>2. 知识图谱的形式化表示</h2>
+
+在谈论知识图谱的时候，“三元组”这个名词经常会被提及，那三元组到底是什么呢？知识图谱的形式化表示又是什么呢？为了回答这些问题，这就需要介绍**语义网技术栈Semantic Web Stack，即，W3C制定的用于描述和关联万维网数据的一系列技术标准**。
+
+![](media/15494507009781.jpg)
+
+<h3>2.1. RDF--资源描述框架Resource Description Framework</h3> 
+
+在介绍RDF前，我想先抛出两张图片和一些背景知识。在阅读知识图谱论文时，我们经常会看到如下的知识图：
+
+![](media/15494513604561.jpg)
+
+其实，上面的知识图并不代表知识图谱的实际组织形式，虽然它简单直接，但它会让我们对知识图谱产生一定的误解。
+
+上面的知识图更**像**是知识图谱的前身：上个世纪五六十年代所提出的一种知识表示形式——语义网络(Semantic Network)。如下图，语义网络和知识图谱相似，但语义网络更侧重于描述概念与概念之间的关系，（有点像生物的层次分类体系——界门纲目科属种），而知识图谱则更偏重于描述实体之间的关联。
+
+![](media/15494523739881.jpg)
+
+语义网络的优点：
+
+1. 容易理解和展示。
+
+2. 相关概念容易聚类。
+
+语义网络的缺点：
+
+1. 节点和边的值没有标准，完全是由用户自己定义。
+
+2. 多源数据融合比较困难，因为没有标准。
+
+3. 无法区分概念节点和对象节点。
+
+4. 无法对节点和边的标签(label，我理解是schema层，后面会介绍)进行定义。
+
+简言之，语义网络可以比较容易地让我们理解语义和语义关系。其表达形式简单直白。然而，由于缺少标准，其比较难应用于实践。而RDF标准解决了语义网络的缺点1和缺点2；RDFS和OWL标准则解决了缺点3和缺点4.
+
+在学习完RDF后，我们会发现真实的知识图谱组织形式如下：
+
+![](media/15494514690963.jpg)
+
+接着，进入正题。
+
+<h4>2.1.1. 简介</h4>
+
+1. RDF是用于描述资源的框架，资源可以是文档、人、物理对象（**实体**）和抽象概念（**概念**）；
+2. RDF适用于应用需要处理互联网信息的场景，而不适用于仅仅将信息展示给人类的场景；
+3. RDF提供了一个表示互联网信息的通用框架，使信息在应用间交换时不会丢失语义；
+
+<h4>2.1.2. RDF数据模型</h4>
+
+> The RDF Data Model is described in this section in the form of an "abstract syntax", i.e. a data model that is independent of a particular concrete syntax (the syntax used to represent triples stored in text files). Different concrete syntaxes may produce exactly the same graph from the perspective of the abstract syntax. The semantics of RDF graphs [RDF11-MT] are defined in terms of this abstract syntax.
+
+1. 三元组Triples--RDF基本语句RDF Statement
+    1. 三元组由subject、predicate、object组成：![-w275](media/15494685309559.jpg)
+    2. `subject`表示资源，类型可以是IRI或Blank node；
+    3. `predicate`表示关系，关系是有向的，也称作属性property，类型只能是IRI；
+    4. `object`表示资源，类型可以是IRI、Blank node或Literal；
+2. RDF数据类型
+    1. **互资源标识符International Resource Identifier--IRIs**：IRI唯一标识一个资源，IRI是URI的泛化（URI是一种形式的IRI），IRI字符串中允许使用non-ascii字符；
+        1. IRI是全局标识符，任何IRI的重复出现都是指代同一事物；
+        2. RDF is agnostic about what the IRI represents. However, IRIs may be given meaning by particular vocabularies or conventions.
+    2. 字面量Literals：非IRI的值；
+        1. 字面量有数据类型，RDF定义了一系列的字面量类型，包括XML Schema中定义的类型，例如string, boolean, integer, decimal and date；
+    3. Blank nodes：不使用IRI标识符来描述资源，有点类似代数中的变量；
+        1. ![-w860](media/15494704389703.jpg)
+
+3. Multiple Graphs：
+    1. Named Graph：将多个图中的RDF语句打包成一个组，并赋予一个IRI，即构成一个Named Graph；
+    2. RDF Dataset：多个named graphs和至多一个defalt graph构成一个RDF Dataset；
+
+<h4>2.1.3. RDF词汇表RDF Vocabularies</h4>
+
+1. 最常用的RDF词汇表是RDF Schema，有RDFS衍生出来诸多词汇表，如Dublin Core, schema.org, SKOS...
+2. RDF词汇表RDFS为区分概念节点和实体节点提供了标准； 
+3. 后续将在介绍RDFS时进行详细介绍
+
+<h4>2.1.4. writing RDF Graphs--RDF语言</h4>
+
+上述RDF数据模型只提供了RDF的abstract syntax，而RDF的具体序列化格式--RDF language存在多种形式，例如：
+
+1. Turtle family of RDF languages (N-Triples, Turtle, TriG and N-Quads);
+2. JSON-LD (JSON-based RDF syntax);
+3. RDFa (for HTML and XML embedding);
+4. RDF/XML (XML syntax for RDF);
+
+RDF文档（RDF Document）是使用某种RDF语言（RDF concrete syntax），例如Turtle, RDFa, JSON-LD等，来编码并存储RDF Graph或RDF Dataset的文档；
+
+![-w905](media/15494721696412.jpg)
+
+![-w894](media/15494722198344.jpg)
+
+![-w886](media/15494722493641.jpg)
+
+更多RDF languages内容，请参阅RDF文档；
+
+
+参考链接：
+
+1. [RDF 1.1 Primer](https://www.w3.org/TR/rdf11-primer/#fig2)；
+2. [W3C: RDF 1.1 Concepts and Abstract Syntax](http://link.zhihu.com/?target=https%3A//www.w3.org/TR/rdf11-concepts/)；
+3. 论文：Exploiting Linked Data and Knowledge Graphs in Large Organizations；
+4. [Google: Introducing the Knowledge Graph: things, not strings](http://link.zhihu.com/?target=https%3A//googleblog.blogspot.co.uk/2012/05/introducing-knowledge-graph-things-not.html)；
+5. [Blog:Problems of the RDF model: Blank Nodes](http://link.zhihu.com/?target=http%3A//milicicvuk.com/blog/2011/07/14/problems-of-the-rdf-model-blank-nodes/)；
+6. [Blog:Compound Value Types in RDF](http://link.zhihu.com/?target=http%3A//blog.databaseanimals.com/compound-value-types-in-rdf)；
+7. [Chen, L., Zhang, H., Chen, Y., & Guo, W. (2012). Blank nodes in rdf. Journal of Software, 7(9).](http://link.zhihu.com/?target=https%3A//www.researchgate.net/publication/276240316_Blank_nodes_in_RDF)；
+
+<h3>2.2. RDF Schema</h3>
+
+<h4>2.2.1. why RDF Schema? -- RDF表达能力有限</h4>
+
+**RDF的表达能力有限，无法区分类和对象，也无法定义和描述类的关系/属性。我的理解是，RDF是对具体事物的描述，缺乏抽象能力，无法对同一个类别的事物进行定义和描述。RDFS本质是RDF词汇的一个拓展。**就以罗纳尔多这个知识图为例，RDF能够表达罗纳尔多和里约热内卢这两个实体具有哪些属性，以及它们之间的关系。但如果我们想定义罗纳尔多是人，里约热内卢是地点，并且人具有哪些属性，地点具有哪些属性，人和地点之间存在哪些关系，这个时候RDF就表示无能为力了。对于知识图谱等应用，这种泛化抽象能力都是相当重要的。RDFS和OWL这两种技术或者说模式语言/本体语言（schema/ontology language）解决了RDF表达能力有限的困境。
+
+> Notice: RDFS/OWL序列化格式和RDF没什么不同，其实在表现形式上，它们就是RDF。其常用的方式主要是RDF/XML，Turtle。另外，通常我们用小写开头的单词或词组来表示属性，大写开头的表示类。数据属性（data property，实体和literal字面量的关系）通常由名词组成，而对象数据（object property，实体和实体之间的关系）通常由动词（has，is之类的）加名词组成。剩下的部分符合驼峰命名法。为了将它们表示得更清楚，避免读者混淆，之后我们都会默认这种命名方式。读者实践过程中命名方式没有强制要求，但最好保持一致。
+
+
+相关内容直接查阅文档RDF Schema 1.1，就不再赘述了；
+
+参考资料：
+1. [知识图谱基础之RDF，RDFS与OWL（必看，给的RDFS与OWL的例子很好）](https://zhuanlan.zhihu.com/p/32122644)；
+2. [RDF Schema 1.1](https://www.w3.org/TR/2014/REC-rdf-schema-20140225/)；
+
+<h3>2.3. OWL </h3>
+ 
+<h4>2.3.1. why OWL?--RDFS表达能力有限</h4>
+
+RDFS的表达能力还是相当有限的，因此提出了OWL。**OWL可当做是RDFS的一个扩展，其添加了额外的预定义词汇。同时，OWL还提供很强的推理能力。**
+
+参考资料：
+1. [知识图谱基础之RDF，RDFS与OWL（必看，给的RDFS与OWL的例子很好）](https://zhuanlan.zhihu.com/p/32122644)；
+2. [OWL 2 Web Ontology Language Primer (Second Edition)](https://www.w3.org/TR/owl2-primer/)；
+3. [OWL 2 Web Ontology Language Document Overview (Second Edition)](https://www.w3.org/TR/owl2-overview/)；
+4. [Learn RDF - Cambridge Semantics](http://link.zhihu.com/?target=https%3A//www.cambridgesemantics.com/blog/semantic-university/learn-rdf/)；
+5. [Learn OWL and RDFS - Cambridge Semantics](http://link.zhihu.com/?target=https%3A//www.cambridgesemantics.com/blog/semantic-university/learn-owl-rdfs/)；
+
+<h2>附录. 知识图谱到底是什么？</h2>
+
+在之前的[知识图谱理论篇(一)--知识图谱构建技术综述](https://github.com/charosen/ClassNotes/blob/master/knowledge_graph/Knowledge_Graph_Construction_Techniques.md)中，我们就给大家介绍过知识图谱的定义：
+
+> 知识图谱是结构化的语义知识库，是以“实体-关系-实体”或“实体-属性-属性值”三元组为基本单位构成的网络；
+
+从定义中，我们知道知识图谱无非是使用网络结构组织知识。那为什么2012年谷歌需要提出知识图谱这个概念呢？使用网络结构来组织知识又有什么好处呢？
+
+如果你了解过搜索引擎和语义网Semantic Web，就能明白知识图谱提出的必要性。
+
+长期以来，搜索引擎是根据用户搜索的关键字计算相似度，排序网页并返回包含“关键字”的网页结果。如此一来，搜索引擎无法洞察用户查询背后的语义信息，会返回大量包含“关键字”的、但与查询语义不相关的噪声网页，用户不得不在众多返回结果中逐一查找自己感兴趣的内容。例如，用户在搜索引擎中搜索“罗纳尔多”，搜索引擎大多会返回“肥罗”的相关内容，但用户可能关心的是“c罗”的相关内容。这也是计算机一直面临的困境--无法获取网络文本的语义信息。
+
+因此，为了提升搜索引擎返回的答案质量、为了让机器能够理解文本背后的含义，我们需要对可描述的事物(实体)进行建模，填充它的属性，拓展它和其他事物的联系，构建实体之间的网络，即，构建机器的先验知识。
+
+![](media/15494433673774.jpg)
+
+> 需要说明的是，上面的知识图并不代表知识图谱的实际组织形式，相反，它还会让读者对知识图谱产生一定的误解。在下一个部分，我会给出这张图所包含内容在知识图谱中更形式化的表示。实际上，我看到许多介绍知识图谱的文章都喜欢给出此种类型的图，却又不给出相应的说明，这可能会让读者一开始就进入理解的误区。
+
+参考资料: [为什么需要知识图谱？什么是知识图谱？——KG的前世今生](https://zhuanlan.zhihu.com/p/31726910)
+
+
+
