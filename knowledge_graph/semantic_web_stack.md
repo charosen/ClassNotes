@@ -86,13 +86,14 @@
 
 3. Multiple Graphs：
     1. Named Graph：将多个图中的RDF语句打包成一个组，并赋予一个IRI，即构成一个Named Graph；
-    2. RDF Dataset：多个named graphs和至多一个defalt graph构成一个RDF Dataset；
+    2. RDF Dataset：多个named graphs和至多一个default graph构成一个RDF Dataset；
 
 <h4>2.1.3. RDF词汇表RDF Vocabularies</h4>
 
-1. 最常用的RDF词汇表是RDF Schema，有RDFS衍生出来诸多词汇表，如Dublin Core, schema.org, SKOS...
-2. RDF词汇表RDFS为区分概念节点和实体节点提供了标准； 
-3. 后续将在介绍RDFS时进行详细介绍
+1. RDF词汇表是**描述和建模RDF数据**的词汇表，用于对RDF进行类似的类定义及其属性的定义；RDF是**描述资源/互联网数据**的通用框架（注意区别）；
+2. RDF词汇表RDFS为区分概念节点和实体节点提供了标准；
+3. 最常用的RDF词汇表是RDF Schema，有RDFS衍生出来诸多词汇表，如Dublin Core, schema.org, SKOS... 
+4. 后续将在介绍RDFS时进行详细介绍
 
 <h4>2.1.4. writing RDF Graphs--RDF语言</h4>
 
@@ -126,12 +127,44 @@ RDF文档（RDF Document）是使用某种RDF语言（RDF concrete syntax），�
 
 <h3>2.2. RDF Schema</h3>
 
-<h4>2.2.1. why RDF Schema? -- RDF表达能力有限</h4>
+<h4>why RDF Schema? -- RDF表达能力有限</h4>
 
 **RDF的表达能力有限，无法区分类和对象，也无法定义和描述类的关系/属性。我的理解是，RDF是对具体事物的描述，缺乏抽象能力，无法对同一个类别的事物进行定义和描述。RDFS本质是RDF词汇的一个拓展。**就以罗纳尔多这个知识图为例，RDF能够表达罗纳尔多和里约热内卢这两个实体具有哪些属性，以及它们之间的关系。但如果我们想定义罗纳尔多是人，里约热内卢是地点，并且人具有哪些属性，地点具有哪些属性，人和地点之间存在哪些关系，这个时候RDF就表示无能为力了。对于知识图谱等应用，这种泛化抽象能力都是相当重要的。RDFS和OWL这两种技术或者说模式语言/本体语言（schema/ontology language）解决了RDF表达能力有限的困境。
 
 > Notice: RDFS/OWL序列化格式和RDF没什么不同，其实在表现形式上，它们就是RDF。其常用的方式主要是RDF/XML，Turtle。另外，通常我们用小写开头的单词或词组来表示属性，大写开头的表示类。数据属性（data property，实体和literal字面量的关系）通常由名词组成，而对象数据（object property，实体和实体之间的关系）通常由动词（has，is之类的）加名词组成。剩下的部分符合驼峰命名法。为了将它们表示得更清楚，避免读者混淆，之后我们都会默认这种命名方式。读者实践过程中命名方式没有强制要求，但最好保持一致。
 
+<h4>2.2.1. 简介</h4>
+
+1. RDF词汇表是**描述和建模RDF数据**的词汇表，用于对RDF进行类似的类定义及其属性的定义；RDF是**描述资源/互联网数据**的通用框架；（注意区别）；
+2. RDF词汇表RDFS为区分概念节点和实体节点提供了标准；
+3. RDF schema是最常用的RDF词汇表，其他常用RDF词汇表有Dublin core, schema.org, SKOS...
+4. RDF schema<http://www.w3.org/2000/01/rdf-schema#>是RDF基本词汇(rdf:type, rdf:subject...)<https://www.w3.org/1999/02/22-rdf-syntax-ns#>的一个拓展词汇表；
+5. RDF schema的类class和属性property系统与面向对象编程的类系统很相似，但是它们的区别在于：
+    1. 面向对象编程根据实例instance拥有的属性来定义类（class-centric approach）；
+    2. RDF schema根据属性/关系相关联的类来定义属性(property-centric approach)；
+
+>The RDF Schema class and property system is similar to the type systems of object-oriented programming languages such as Java. RDF Schema differs from many such systems in that instead of defining a class in terms of the properties its instances may have, RDF Schema describes properties in terms of the classes of resource to which they apply. This is the role of the domain and range mechanisms described in this specification. For example, we could define the eg:author property to have a domain of eg:Document and a range of eg:Person, whereas a classical object oriented system might typically define a class eg:Book with an attribute called eg:author of type eg:Person. Using the RDF approach, it is easy for others to subsequently define additional properties with a domain of eg:Document or a range of eg:Person. This can be done without the need to re-define the original description of these classes. One benefit of the RDF property-centric approach is that it allows anyone to extend the description of existing resources, one of the architectural principles of the Web [BERNERS-LEE98].
+
+<h4>2.2.2. RDFS类词汇</h4>
+
+
+1. 资源可以分成许多类，类的成员即类的实例，类本身也是资源；
+2. 不同的类可以存在相同的实例集，但每个类都有其独有的属性，以与其他类区分开；
+3. 类可以是其自身的实例；
+
+![-w1371](media/15507405509312.jpg)
+
+<h4>2.2.3. RDFS属性词汇</h4>
+
+![-w1387](media/15507410768876.jpg)
+
+<h4>2.2.4. 使用rdfs:domain和rdfs:range来描述属性</h4>
+
+使用rdfs:domain和rdfs:range来约束属性的rdf:subject和rdf:object
+
+<h4>2.2.5. 其他词汇</h4>
+
+本节介绍RDF中的一些基本词汇container、collection、reification、utility properties等等
 
 相关内容直接查阅文档RDF Schema 1.1，就不再赘述了；
 
@@ -141,9 +174,80 @@ RDF文档（RDF Document）是使用某种RDF语言（RDF concrete syntax），�
 
 <h3>2.3. OWL </h3>
  
-<h4>2.3.1. why OWL?--RDFS表达能力有限</h4>
+<h4>why OWL?--RDFS表达能力有限</h4>
 
 RDFS的表达能力还是相当有限的，因此提出了OWL。**OWL可当做是RDFS的一个扩展，其添加了额外的预定义词汇。同时，OWL还提供很强的推理能力。**
+
+<h4>2.3.4. 类、属性、个体--使用它们简单建模本体</h4>
+
+1. 类和实例：
+    1. 使用`rdf:type`来表示类的实例；
+2. 类的层级结构：
+    1. 使用`rdfs:subClassOf`表示子类，若"every A is B"，则A是B的子类；
+    2. `rdfs:subClassOf`是可传递的transitive、自反的reflexive（every class is its own subclass）；
+    3. 使用`owl:equivalentClass`表示两个类是等价的；
+3. 类不相交：
+    1. 使用`owl:AllDisjointClasses`表示类间不相交；
+    2. In practice, disjointness statements are often forgotten or neglected. The arguable reason for this could be that intuitively, classes are considered disjoint unless there is other evidence. By omitting disjointness statements, many potentially useful consequences can get lost. Note that in our example, the disjointness axiom is needed to deduce that Mary is not a man. Moreover, given the above axioms, a reasoner can infer the disjointness of the classes Mother and Man.
+4. 对象属性：
+    1. ![](media/15510762438582.jpg)
+    2. 使用`owl:NegativePropertyAssertion`表示属性不存在；
+    3. Negative property assertion是owl中唯一表述something is not true的方法；（owl依据开放世界假说，即owl中missing的知识，可能是真的，所以必须显示声明not true的知识）；
+    4. ![-w1845](media/15510769389490.jpg)
+
+5. 属性的层级结构：
+    1. 使用`rdfs:subPropertyOf`表示子属性；
+    2. 使用`owl:equivalentPropety`表示两个属性是等价的；
+6. 使用`rdfs:domain`和`rdfs:range`来约束属性；
+7. 实体等价与实体不等价：
+    1. 使用`owl:sameAs`表示两个实体是相同实体；
+    2. 使用`owl:differentFrom`表示两个实体是不同实体；
+8. 数据属性：
+    1. 详见文档；
+    2. We would like to point out at this stage a common mistake which easily occurs when using property domains and ranges. In the example just given, which states that the hasAge property is only used to relate persons with non-negative integers, assume that we also specify the information that Felix is in the class Cat and that Felix hasAge 9. From the combined information, it would then be possible to deduce that Felix is also in the class Person, which is probably not intended. This is a commonly modeling error: note that a domain (or range) statement is not a constraint on the knowledge, but allows a reasoner to infer further knowledge. If we state – as in our example – that an age is only given for persons, then everything we give an age for automatically becomes a person.
+
+<h4>2.3.5. Advanced Class Relationships</h4>
+
+1. 复杂类：
+    1. OWL支持类的逻辑运算（and、or、not）与集合运算（交`owl:intersactionOf`、并`owl:unionOf`、补`owl:complementOf`），These constructors combine atomic classes – i.e. classes with names – to complex classes；
+    2. But, of course, it is also possible to use class constructors together with a subclass statement in order to indicate necessary, but not sufficient, conditions for a class. The following statement indicates that every Grandfather is both a man and a parent (whereas the converse is not necessarily true);
+2. 属性限制：
+    1. existential quantification: ![-w879](media/15511018521896.jpg)
+    2. universal quantification: ![-w859](media/15511024887213.jpg)
+    3. Property restrictions can also be used to describe classes of individuals that are related to one particular individual. For instance we could define the class of John's children: ![-w885](media/15511037720525.jpg)
+    4. As a special case of individuals being interlinked by properties, an individual might be linked to itself. ![-w898](media/15511038283098.jpg)
+3. 属性数量限制Property Cardinality Restriction：
+    1. Using universal quantification, we can say something about all of somebody's children, whereas existential quantification allows us to refer to (at least) one of them. However, we might want to specify the number of individuals involved in the restriction. Indeed, we can construct classes depending on the number of children. The following example states that John has at most four children who are themselves parents；
+    2. 使用`owl:maxQualifiedCardinality`表示至多有几个属性；
+    3. 使用`owl:minQualifiedCardinality`表示至多有几个属性；
+    4. 使用`owl:qualifiedCardinality`表示精确匹配几个属性；
+    5. In a cardinality restriction, providing the class is optional; if we just want to talk about the number of all of John's children we can write the following: ![-w880](media/15511042535383.jpg)
+4. 枚举所有实例：
+    1. 构建类最简单直接的方法：枚举其所有实例；
+    2. ![-w877](media/15511043527657.jpg)
+
+<h4>2.3.6. Advanced Use of Properties</h4>
+
+1. 属性特性：
+    1. 逆属性`owl:inverseOf`;
+    2. 对陈属性`owl:SymmetricProperty`：双向、the property relates A with B exactly if it relates B with A;
+    3. 非对称属性`owl:AsymmetricProperty`;
+        1. Note that being asymmetric is a much stronger notion than being non-symmetric. Likewise, being symmetric is a much stronger notion than being non-asymmetric.
+    4. 属性不相交`owl:propertyDisjointWith`：two properties are disjoint if there are no two individuals that are interlinked by both properties;
+    5. 自反属性`owl:ReflexiveProperty`：Properties can also be reflexive: such a property relates everything to itself;
+        1. Note that this does not necessarily mean that every two individuals which are related by a reflexive property are identical;
+    6. 非自反属性`owl:IrreflexiveProperty`： no individual can be related to itself by such a role;
+    7. Functional属性`owl:FunctionalProperty`： it just states that there can be no more than one;
+    8. 传递性属性`owl:TransitiveProperty`;
+2. 属性链Property Chains：
+    1. ![-w877](media/15511073570255.jpg)
+3. Keys：
+    1. ![-w875](media/15511073806284.jpg)
+
+<h4>2.3.7. Advanced Use of Datatyped</h4>
+
+更多内容，详见owl 2文档；还有8、9、10章；
+
 
 参考资料：
 1. [知识图谱基础之RDF，RDFS与OWL（必看，给的RDFS与OWL的例子很好）](https://zhuanlan.zhihu.com/p/32122644)；
