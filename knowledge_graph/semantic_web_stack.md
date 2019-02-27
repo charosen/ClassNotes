@@ -256,6 +256,92 @@ RDFS的表达能力还是相当有限的，因此提出了OWL。**OWL可当做�
 4. [Learn RDF - Cambridge Semantics](http://link.zhihu.com/?target=https%3A//www.cambridgesemantics.com/blog/semantic-university/learn-rdf/)；
 5. [Learn OWL and RDFS - Cambridge Semantics](http://link.zhihu.com/?target=https%3A//www.cambridgesemantics.com/blog/semantic-university/learn-owl-rdfs/)；
 
+<h3>2.4. SPARQL 1.1</h3>
+
+<h4>2.4.1. 简介</h4>
+
+1. SPARQL 1.1是为在Web或RDF存储中查询和操作RDF图内容提供语言和协议的一组规范。
+2. SPARQL 1.1由一系列规范组成：
+    1. [SPARQL 1.1 Query Language](http://www.w3.org/TR/sparql11-query/): RDF的查询语句；
+    2. [SPARQL 1.1 Query Results JSON Format](http://www.w3.org/TR/sparql11-results-json/)和[SPARQL 1.1 Query Results CSV and TSV Formats](http://www.w3.org/TR/sparql11-results-csv-tsv/): SPARQL标准的查询结果是XML格式[SPARQL-XML-Result](https://www.w3.org/TR/sparql11-overview/#SPARQL-XML-Result)，前述两个规范为SPARQL查询返回JSON, CSV, TSV格式结果提供支持。
+    3. [SPARQL 1.1 Federated Query](http://www.w3.org/TR/sparql11-federated-query/): 该规范定义了一个在不同SPARQL endpoints上分布式执行查询语句的SPARQL 1.1 Query Language的拓展版本；
+    4. [SPARQL 1.1 Entailment Regimes](http://www.w3.org/TR/sparql11-entailment/): 该规范定义不同蕴含制度entailment regimes下（例如RDFS, OWL, RIF）SPARQL查询的语义；
+    5. [SPARQL 1.1 Update Language](http://www.w3.org/TR/sparql11-update/): RDF图的更新语言；
+    6. [SPARQL 1.1 Protocol for RDF](http://www.w3.org/TR/sparql11-protocol/): 该协议定义了向SPARQL service传送SPARQL查询和更新请求的方法；
+    7. [SPARQL 1.1 Service Description](http://www.w3.org/TR/sparql11-service-description/): 该规范定义了发现SPARQL service的方法和描述SPARQL service的词汇表；
+    8. [SPARQL 1.1 Graph Store HTTP Protocol](http://www.w3.org/TR/sparql11-http-rdf-update/): As opposed to the full SPARQL protocol (Protocol for RDF), this specification defines minimal means for managing RDF graph content directly via common HTTP operations；（直接使用HTTP协议POST, DELETE, PUT, GET来对SPARQL service上的RDF图内容执行增、删、改、查操作；而无需编写SPARQL语言并传送给SPARQL service来执行操作）；
+    9. [SPARQL 1.1 Test Cases](http://www.w3.org/2009/sparql/docs/tests/):  A suite of tests, helpful for understanding corner cases in the specification and assessing whether a system is SPARQL 1.1 conformant；
+
+<h4>2.4.2. SPARQL 1.1 查询语句</h4>
+
+1. 简单查询Making Simple Queries：
+    1. SPARQL查询通常包含一个基本图模式`basic graph pattern`；
+    2. 基本图模式`basic graph pattern`即一组三元组模式`triple pattern`；
+    3. 三元组模式`triple pattern`类似于RDF三元组，其不同之处在于每一个subject、predicate、object都可以是变量；
+    4. A basic graph pattern matches a subgraph of the RDF data when RDF terms from that subgraph may be substituted for the variables and the result is RDF graph equivalent to the subgraph；
+    5. Writting a simple query：SELECT从句指定查询结果应显示的变量，WHERE从句提供基础图模式basic graph pattern来匹配数据图；
+        1. ![-w1331](media/15512338051293.jpg)
+    6. Multiple matches：查询结果是一个solution sequence，每一个solution对应于查询图模式匹配数据；There may be zero, one or multiple solutions to a query；
+        1. ![-w1354](media/15512363717533.jpg)
+    7. 匹配RDF字面量及特定数据类型：
+        1. 匹配language tag：![-w1334](media/15512366059212.jpg)
+        2. 匹配数值类型：![-w1363](media/15512367004943.jpg)
+        3. 匹配任意数据类型：![-w1355](media/15512367270750.jpg)
+    8. 匹配blank node：![-w1355](media/15512372835020.jpg)
+    9. 使用表达式来创建值：下面的查询语句展示了如何使用CONCAT函数连接first names和last names来构建name：![-w1314](media/15512374054803.jpg)
+    10. 构建RDF图：不像SELECT查询返回variable binding（变量-RDF数据对），CONSTRUCT查询返回RDF图；The graph is built based on a template which is used to generate RDF triples based on the results of matching the graph pattern of the query.![-w1371](media/15512376583222.jpg)
+2. RDF Term约束：
+    1. 图形模式匹配产生solution sequence，其中每个solution都有一组（变量-rdf术语）对；SPARQL FILTER将solution限制为过滤器表达式计算结果为TRUE的solution；
+    2. 约束字符串的值：![-w1349](media/15512381651742.jpg)
+    3. 约束数值：![-w1362](media/15512382408563.jpg)
+3. SPARQL语法：
+    1. RDF Term语法：
+        1. IRI语法：![-w1369](media/15512506932666.jpg)
+        2. 字面量语法：字符串+^^+特定数据类型iri
+            1. 字符串：双引号、单引号扩起来；
+            2. 语言字符串：字符串+@+langugage tag
+            3. 整数：无引号的数；
+            4. Decimal：无引号，无指数e的，加小数点的数；
+            5. 指数：无引号，加指数e的数；
+            6. 布尔类型：true or false；
+            7. ![-w1363](media/15512510155261.jpg)
+        3. 查询变量语法：$+变量名，或，?+变量名；
+        4. blank node语法：
+            1. []：表示在查询语句中只使用一次的blank node；
+            2. _:abc：为blank node赋予blank node标签abc，可表示在查询语句中使用多次的blank node；
+            3. ![-w1353](media/15512512116370.jpg)
+    2. 三元组模式triple pattern语法：
+        1. predicate-object列表：使用分号`;`分隔一个subject对应的多个predicate-object；
+        2. object列表：使用`,`分隔一个subject-predicate对应的多个object；
+        3. RDF Collections：![-w1346](media/15512517425630.jpg)
+        4. rdf:type：![-w1350](media/15512518911215.jpg)
+4. 图模式graph patterns：
+    1. SPARQL基于图形模式匹配。通过以各种方式组合较小的模式，可以形成更复杂的图形模式：![-w1351](media/15512539506891.jpg)
+    2. 基本图模式basic graph pattern：
+        1. blank node标签：一个blank node标签只能用于任意查询的仅一个基本图模式；
+        2. ![-w1347](media/15512541119408.jpg)
+    3. 组图模式group graph pattern：
+        1. 使用`{}`分隔不同图模式；![-w1326](media/15512544594074.jpg)
+        2. empty group pattern：![-w1326](media/15512544389473.jpg)
+        3. 约束的作用域：FILTER作用域其所在的`{}`之内的所有triple patterns；![-w1330](media/15512543543715.jpg)
+        4. group graph pattern examples：![-w1336](media/15512542844854.jpg)
+5. Optional Graph Pattern:
+    1. Optional Pattern Matching:
+        1. OPTIONAL关键字是作用在其左侧的pattern上的；
+        2. ![](media/15512558744512.jpg)
+    2. Constraints in Optional Pattern Matching:![-w1329](media/15512566777797.jpg)
+    3. Multiple Optional Graph Patterns:![-w1361](media/15512567409751.jpg)
+6. Alternative Graph Pattern：![-w1358](media/15512601350468.jpg)
+7. 否定命题Negation：
+
+更多内容，请查看官方文档[SPARQL 1.1 Query Language](https://www.w3.org/TR/sparql11-query/#rPrefixedName)；
+
+参考资料：
+
+1. [SPARQL 1.1 Overview](https://www.w3.org/TR/sparql11-overview/);
+2. [SPARQL 1.1 Query Language](https://www.w3.org/TR/sparql11-query/#rPrefixedName);
+
+
 <h2>附录. 知识图谱到底是什么？</h2>
 
 在之前的[知识图谱理论篇(一)--知识图谱构建技术综述](https://github.com/charosen/ClassNotes/blob/master/knowledge_graph/Knowledge_Graph_Construction_Techniques.md)中，我们就给大家介绍过知识图谱的定义：
