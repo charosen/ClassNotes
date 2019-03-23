@@ -55,6 +55,8 @@ Jena的Inference API支持多种推理机，包括内置的规则推理机、外
 
 Jena提供了RDFS、OWL和通用规则推理机。其实Jena的RDFS和OWL推理机也是通过Jena自身的通用规则推理机实现的。
 
+关于Jena Inference API的更多信息，请查看[Reasoners and rule engines: Jena inference support](http://jena.apache.org/documentation/inference/)；
+
 <h2>4. Fuseki</h2>
 
 Fuseki是Jena提供的SPARQL服务器，其提供了四种运行模式：单独服务器、作为系统的一个服务运行、作为web应用运行或者作为一个嵌入式服务器运行。Fuseki提供[Apache Shiro](https://shiro.apache.org/)用以安全控制，提供用户界面用以监视和管理服务器，以及提供SPARQL 1.1 protocols for query and update和SPARQL Graph Store protocol协议用以查询和更新；
@@ -147,6 +149,7 @@ Fuseki配置文件用于定义数据服务。Fuseki配置文件本身就是用RD
 
 ![-w759](media/15533363672368.jpg)
 
+![-w757](media/15533363945142.jpg)
 
 
 
