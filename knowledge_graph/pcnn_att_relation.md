@@ -24,6 +24,7 @@
     2. 模型输入：一个句子的词序列；
     3. 模型输出：各类关系的softmax概率；
     4. 句子编码器sentence encoder：即PCNN模型(word embedding->position embedding->concat->convolution->piecewise max pooling)；![-w601](media/15537445930035.jpg)
+        1. OpenNRE使用的相对位置是正的，与PCNN论文里的-2不同，用的是正2；
 
     5. 句子级别注意力selective attention over instances：
         1. 对于一个实体对的包(Set)$S = \{ x_1, x_2, ..., x_n \}$中的所有实例/句子表示$\vec{x}_1, \vec{x}_2, ..., \vec{x}_n$，我们计算包/集合表示向量$\vec{s} = \sum_i \alpha_i \vec{x}_i$，其中$\alpha_i$可以通过两种方式得到；
