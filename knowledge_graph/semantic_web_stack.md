@@ -219,7 +219,7 @@ RDFS的表达能力还是相当有限的，因此提出了OWL。**OWL可当做�
 3. 属性数量限制Property Cardinality Restriction：
     1. Using universal quantification, we can say something about all of somebody's children, whereas existential quantification allows us to refer to (at least) one of them. However, we might want to specify the number of individuals involved in the restriction. Indeed, we can construct classes depending on the number of children. The following example states that John has at most four children who are themselves parents；
     2. 使用`owl:maxQualifiedCardinality`表示至多有几个属性；
-    3. 使用`owl:minQualifiedCardinality`表示至多有几个属性；
+    3. 使用`owl:minQualifiedCardinality`表示至少有几个属性；
     4. 使用`owl:qualifiedCardinality`表示精确匹配几个属性；
     5. In a cardinality restriction, providing the class is optional; if we just want to talk about the number of all of John's children we can write the following: ![-w880](media/15511042535383.jpg)
 4. 枚举所有实例：
@@ -230,7 +230,7 @@ RDFS的表达能力还是相当有限的，因此提出了OWL。**OWL可当做�
 
 1. 属性特性：
     1. 逆属性`owl:inverseOf`;
-    2. 对陈属性`owl:SymmetricProperty`：双向、the property relates A with B exactly if it relates B with A;
+    2. 对称属性`owl:SymmetricProperty`：双向、the property relates A with B exactly if it relates B with A;
     3. 非对称属性`owl:AsymmetricProperty`;
         1. Note that being asymmetric is a much stronger notion than being non-symmetric. Likewise, being symmetric is a much stronger notion than being non-asymmetric.
     4. 属性不相交`owl:propertyDisjointWith`：two properties are disjoint if there are no two individuals that are interlinked by both properties;
@@ -340,6 +340,7 @@ RDFS的表达能力还是相当有限的，因此提出了OWL。**OWL可当做�
 
 1. [SPARQL 1.1 Overview](https://www.w3.org/TR/sparql11-overview/);
 2. [SPARQL 1.1 Query Language](https://www.w3.org/TR/sparql11-query/#rPrefixedName);
+3. [Apache jena关于SPARQL的教程](http://jena.apache.org/tutorials/sparql.html);
 
 
 <h2>附录. 知识图谱到底是什么？</h2>
