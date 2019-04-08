@@ -59,9 +59,12 @@ R2RML映射使用[triples map](https://www.w3.org/TR/r2rml/#dfn-triples-map)将l
 2. 如果数据源是csv，则需要定义rml:source和rml:iterator；
 3. 如果数据源是json、xml，则需要定义rml:source、rml:referenceFormualtion和rml:iterator；
 
-> The source (**rml:source**) locates the input data source. It is a [URI] that represents the data source where the data source is.
-The logical iterator (**rml:iterator**) defines the iteration loop used to map the data of the input source. 
-The reference formulation (**rml:referenceFormulation**) defines the reference formulation used to refer to the elements of the data source. The reference formulation must be specified in the case of databases and XML and JSON data sources. By default SQL2008 for databases, as SQL2008 is the default for R2RML, [XPath] for XML and JSONPath for JSON data sources.
+> 
+The source (**rml:source**) locates the input data source. It is a [URI] that represents the data source where the data source is.(唯一标识输入数据源的URI)
+> 
+The logical iterator (**rml:iterator**) defines the iteration loop used to map the data of the input source. (对每一条输入数据添加的约束)
+>
+The reference formulation (**rml:referenceFormulation**) defines the reference formulation used to refer to the elements of the data source. The reference formulation must be specified in the case of databases and XML and JSON data sources. By default SQL2008 for databases, as SQL2008 is the default for R2RML, [XPath] for XML and JSONPath for JSON data sources.(访问数据元素的引用格式)
 
 类似的，RML映射使用[triples map](https://www.w3.org/TR/r2rml/#dfn-triples-map)将logical source中的(数据库、CSV、TSV)每一行/(XML)每一个元素/(JSON)每一个对象映射成多个RDF三元组，一个triples map包含以下部分：
 
