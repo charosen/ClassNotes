@@ -48,7 +48,7 @@
             1. 之前提出的spectral domain的卷积不是局部的，且计算复杂度为$O(n^2)$；
     4. 关于图傅立叶变换和图卷积的内容，请参考下述GCN小结
     5. 第一代GCN--[Spectral Networks and Locally Connected Networks on Graphs](https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1312.6203)
-        1. 将卷积核g的图傅立叶变换GFT$g_{\theta}(\lambda)$设计成自由卷积核，参数$\theta$在空间中无约束取值$$ g_\theta(\land) = \left(\begin{array}{ccc} \theta_0 \\ & \ddots & \\ & & \theta_{N-1} \end{array}\right) $$
+        1. 将卷积核g的图傅立叶变换GFT$g_{\theta}(\lambda)$设计成自由卷积核，参数$\theta$在空间中无约束取值$$ \begin{aligned} g_\theta(\land) = \left(\begin{array}{ccc} \theta_0 &\\ &\ddots &\\ &&\theta_{N-1} \end{array}\right) \end{aligned}$$
         2. 神经网络公式：$$y_{output}=\sigma \left(U g_\theta(\Lambda) U^T x \right)$$
         3. 弊端：
             1. 需要计算拉普拉斯矩阵特征分解，即计算与存储正交特征向量基U，计算$U,diag(\theta_l )$及$U^T$三者的矩阵乘积的计算复杂度为$O(n^2)$，存储复杂度为$O(n^2)$；
@@ -57,8 +57,8 @@
 
     6. 本文/第二代GCN--[Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](https://link.zhihu.com/?target=http%3A//papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering)
         1. 多项式参数化局部卷积核：
-            1. 参数$\theta$取值约束为K阶多项式的值$$g_\theta(\Lambda)=\left(\begin{matrix}\sum_{j=0}^K \theta_j \lambda^j_0 & \\ & \ddots \\ && \sum_{j=0}^K \theta_j \lambda^j_{N-1} \end{matrix}\right) =  \sum_{j=0}^K \theta_j \Lambda^j$$
-            2. 神经网络公式：$$\begin{equation} \begin{align}y_{output}=\sigma \left(U  g_\theta(\Lambda)  U^T x \right) = \sigma \left(U  \sum_{j=0}^K \theta_j \Lambda^j  U^T x \right) = \sigma \left( \sum_{j=0}^K \theta_j  U \Lambda^j  U^T x \right) = \sigma \left( \sum_{j=0}^K \theta_j L^j x \right) = \sigma \left( g_\theta(L) x \right) \end{align} \end{equation}$$
+            1. 参数$\theta$取值约束为K阶多项式的值$$ \begin{aligned} g_\theta(\Lambda) = \left( \begin{matrix} \sum_{j=0}^K \theta_j \lambda^j_0 &\\ &\ddots \\ &&\sum_{j=0}^K \theta_j \lambda^j_{N-1} \end{matrix}\right) =  \sum_{j=0}^K \theta_j \Lambda^j \end{aligned}$$
+            2. 神经网络公式：$$\begin{aligned} y_{output} &= \sigma \left(U  g_\theta(\Lambda)  U^T x \right) \\ &= \sigma \left(U  \sum_{j=0}^K \theta_j \Lambda^j  U^T x \right) \\ &= \sigma \left( \sum_{j=0}^K \theta_j  U \Lambda^j  U^T x \right) \\ &= \sigma \left( \sum_{j=0}^K \theta_j L^j x \right) \\ &= \sigma \left( g_\theta(L) x \right) \end{aligned}$$
                 1. 对于拉普拉斯矩阵L有如下性质，任意两节点i，j的最短路径大于k时，即$\forall d_G(i, j) > k$，则$(L^k)_{i,j} = 0, where d_G(i,j)$是i，j节点的最短路径
                 2. 当k=1时，卷积输出为各节点与其1-hop邻居节点的卷积结果...以此类推![](media/15581885227710.jpg)
                 3. 当k=i时，卷积输出为各节点与其i-hop邻居节点的卷积结果...![](media/15581885320260.jpg)
