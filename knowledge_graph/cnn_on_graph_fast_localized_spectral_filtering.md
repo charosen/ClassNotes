@@ -48,7 +48,7 @@
             1. 之前提出的spectral domain的卷积不是局部的，且计算复杂度为$O(n^2)$；
     4. 关于图傅立叶变换和图卷积的内容，请参考下述GCN小结
     5. 第一代GCN--[Spectral Networks and Locally Connected Networks on Graphs](https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1312.6203)
-        1. 将卷积核g的图傅立叶变换GFT$g_{\theta}(\lambda)$设计成自由卷积核，参数$\theta$在空间中无约束取值$$ \begin{aligned} g_\theta(\land) = \left(\begin{array}{ccc} \theta_0 &\\ &\ddots &\\ &&\theta_{N-1} \end{array}\right) \end{aligned}$$
+        1. 将卷积核g的图傅立叶变换GFT$g_{\theta}(\lambda)$设计成自由卷积核，参数$\theta$在空间中无约束取值$$ \begin{aligned} g_\theta(\land) = \left(\begin{array}{ccc} \theta_0 &\\\\ &\ddots &\\\\ &&\theta_{N-1} \end{array}\right) \end{aligned}$$
         2. 神经网络公式：$$y_{output}=\sigma \left(U g_\theta(\Lambda) U^T x \right)$$
         3. 弊端：
             1. 需要计算拉普拉斯矩阵特征分解，即计算与存储正交特征向量基U，计算$U,diag(\theta_l )$及$U^T$三者的矩阵乘积的计算复杂度为$O(n^2)$，存储复杂度为$O(n^2)$；
@@ -58,7 +58,7 @@
     6. 本文/第二代GCN--[Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](https://link.zhihu.com/?target=http%3A//papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering)
         1. 多项式参数化局部卷积核：
             1. 参数$\theta$取值约束为K阶多项式的值$$ \begin{aligned} g_\theta(\Lambda) = \left( \begin{matrix} \sum_{j=0}^K \theta_j \lambda^j_0 &\\\\ &\ddots \\\\ &&\sum_{j=0}^K \theta_j \lambda^j_{N-1} \end{matrix}\right) =  \sum_{j=0}^K \theta_j \Lambda^j \end{aligned}$$
-            2. 神经网络公式：$$\begin{aligned} y_{output} &= \sigma \left(U  g_\theta(\Lambda)  U^T x \right) \\ &= \sigma \left(U  \sum_{j=0}^K \theta_j \Lambda^j  U^T x \right) \\ &= \sigma \left( \sum_{j=0}^K \theta_j  U \Lambda^j  U^T x \right) \\ &= \sigma \left( \sum_{j=0}^K \theta_j L^j x \right) \\ &= \sigma \left( g_\theta(L) x \right) \end{aligned}$$
+            2. 神经网络公式：$$\begin{aligned} y_{output} &= \sigma \left(U  g_\theta(\Lambda)  U^T x \right) \\\\ &= \sigma \left(U  \sum_{j=0}^K \theta_j \Lambda^j  U^T x \right) \\\\ &= \sigma \left( \sum_{j=0}^K \theta_j  U \Lambda^j  U^T x \right) \\\\ &= \sigma \left( \sum_{j=0}^K \theta_j L^j x \right) \\\\ &= \sigma \left( g_\theta(L) x \right) \end{aligned}$$
                 1. 对于拉普拉斯矩阵L有如下性质，任意两节点i，j的最短路径大于k时，即$\forall d_G(i, j) > k$，则$(L^k)_{i,j} = 0, where d_G(i,j)$是i，j节点的最短路径
                 2. 当k=1时，卷积输出为各节点与其1-hop邻居节点的卷积结果...以此类推![](media/15581885227710.jpg)
                 3. 当k=i时，卷积输出为各节点与其i-hop邻居节点的卷积结果...![](media/15581885320260.jpg)
@@ -105,7 +105,7 @@
 1. 条件：周期信号，且满足狄利克雷条件(充分不必要条件)
 2. 核心思想：信号的正交分解，复指数完备正交函数集：$\{e^{jnw_1t}\}, n=0, \pm1, \pm2, ..., w_1 = \frac{2 \pi}{T}$
 
-3. 公式：$$f_T(t) = \sum_{n=-\infty}^{\infty} F(nw_1) e^{jnw_1t} \\ F(nw_1) = \frac{\int_0^T f_T(t) e^{-jnw_1t} dt}{\int_0^T e^{jnw_1t} e^{-jnw_1t} dt} = \frac{1}{T} \int_0^T f_T(t) e^{-jnw_1t} dt$$
+3. 公式：$$f_T(t) = \sum_{n=-\infty}^{\infty} F(nw_1) e^{jnw_1t} \\\\ F(nw_1) = \frac{\int_0^T f_T(t) e^{-jnw_1t} dt}{\int_0^T e^{jnw_1t} e^{-jnw_1t} dt} = \frac{1}{T} \int_0^T f_T(t) e^{-jnw_1t} dt$$
 
 <h3>4. 基础--傅立叶变换</h3>
 
@@ -126,16 +126,16 @@
 2. 公式：图可以用矩阵表示（邻接矩阵，拉普拉斯矩阵），因此是离散积分(积分变求和)
     1. 图傅立叶变换GFT：$$\hat f(\lambda_l) = \sum_{i=0}^{N-1} f(i) u_l^*(i)$$（对i求和）
     2. 图傅立叶逆变换GIFT：$$f(i) = \sum_{l=0}^{N-1} \hat f(\lambda_l) u_l(i)$$(对l求和)
-    3. 矩阵形式：$$\hat f = \begin{bmatrix}{\hat f(\lambda_0) \\ \hat f(\lambda_1) \\ \vdots  \\ \hat f(\lambda_l) \\ \vdots \\ \hat f(\lambda_{N-1})}\end{bmatrix} = \begin{bmatrix} u_0(0) & u_0(1) & \cdots & u_0(i) & \cdots & u_0(N-1) \\ u_1(0) & u_1(1) & \cdots & u_1(i) & \cdots & u_1(N-1) \\ \vdots & \vdots & \cdots & \vdots  & \cdots & \vdots\\ u_{l}(0) & u_{l}(1) & \cdots & u_{l}(i) & \cdots & u_{l}(N-1) \\ \vdots & \vdots & \cdots & \vdots  & \cdots & \vdots\\ u_{N-1}(0) & u_{N-1}(1) & \cdots & u_{N-1}(i) & \cdots & u_{N-1}(N-1)\end{bmatrix} \begin{bmatrix} {f(0) \\ f(1) \\ \vdots  \\ f(i) \\ \vdots \\ f(N-1)}\ \end{bmatrix} = U^T f \\ f = \begin{bmatrix} {f(0) \\ f(1) \\ \vdots  \\ f(i) \\ \vdots \\ f(N-1)} \end{bmatrix} = \begin{bmatrix} u_0(0) & u_1(0) & \cdots & u_l(0) & \cdots & u_{N-1}(0) \\ u_0(1) & u_1(1) & \cdots & u_l(1) & \cdots & u_{N-1}(1) \\ \vdots & \vdots & \cdots & \vdots  & \cdots & \vdots\\ u_0(i) & u_1(i) & \cdots & u_l(i) & \cdots & u_{N-1}(i) \\ \vdots & \vdots & \cdots & \vdots  & \cdots & \vdots\\ u_0(N-1) & u_1(N-1) & \cdots & u_l(N-1) & \cdots & u_{N-1}(N-1)\end{bmatrix} \begin{bmatrix}{\hat f(\lambda_0) \\ \hat f(\lambda_1) \\ \vdots  \\ \hat f(\lambda_l) \\ \vdots \\ \hat f(\lambda_{N-1})}\end{bmatrix}= U \hat f$$
+    3. 矩阵形式：$$\hat f = \begin{bmatrix}{\hat f(\lambda_0) \\\\ \hat f(\lambda_1) \\\\ \vdots  \\\\ \hat f(\lambda_l) \\\\ \vdots \\\\ \hat f(\lambda_{N-1})}\end{bmatrix} = \begin{bmatrix} u_0(0) & u_0(1) & \cdots & u_0(i) & \cdots & u_0(N-1) \\\\ u_1(0) & u_1(1) & \cdots & u_1(i) & \cdots & u_1(N-1) \\\\ \vdots & \vdots & \cdots & \vdots  & \cdots & \vdots\\\\ u_{l}(0) & u_{l}(1) & \cdots & u_{l}(i) & \cdots & u_{l}(N-1) \\\\ \vdots & \vdots & \cdots & \vdots  & \cdots & \vdots\\\\ u_{N-1}(0) & u_{N-1}(1) & \cdots & u_{N-1}(i) & \cdots & u_{N-1}(N-1)\end{bmatrix} \begin{bmatrix} {f(0) \\\\ f(1) \\\\ \vdots  \\\\ f(i) \\\\ \vdots \\\\ f(N-1)}\ \end{bmatrix} = U^T f \\\\ f = \begin{bmatrix} {f(0) \\\\ f(1) \\\\ \vdots  \\\\ f(i) \\\\ \vdots \\\\ f(N-1)} \end{bmatrix} = \begin{bmatrix} u_0(0) & u_1(0) & \cdots & u_l(0) & \cdots & u_{N-1}(0) \\\\ u_0(1) & u_1(1) & \cdots & u_l(1) & \cdots & u_{N-1}(1) \\\\ \vdots & \vdots & \cdots & \vdots  & \cdots & \vdots\\\\ u_0(i) & u_1(i) & \cdots & u_l(i) & \cdots & u_{N-1}(i) \\\\ \vdots & \vdots & \cdots & \vdots  & \cdots & \vdots\\\\ u_0(N-1) & u_1(N-1) & \cdots & u_l(N-1) & \cdots & u_{N-1}(N-1)\end{bmatrix} \begin{bmatrix}{\hat f(\lambda_0) \\\\ \hat f(\lambda_1) \\\\ \vdots  \\ \hat f(\lambda_l) \\\\ \vdots \\\\ \hat f(\lambda_{N-1})}\end{bmatrix}= U \hat f$$
 3. 如何获得图的正交完备特征向量--拉普拉斯矩阵L（[离散拉普拉斯算子](https://en.wikipedia.org/wiki/Discrete_Laplace_operator)）的特征分解/谱分解（**GCN的核心**）
     1. 由于无向图拉普拉斯矩阵半正定对称，有如下性质：
         1. **对称矩阵一定n个线性无关的特征向量（可以特征分解）**
         2. **半正定矩阵的特征值一定非负**
         3. **对阵矩阵的特征向量相互正交，即所有特征向量构成的矩阵为正交矩阵**
-    2. 谱分解：$$L= U\left(\begin{matrix}\lambda_1 & \\&\ddots \\ &&\lambda_n \end{matrix}\right) U^{-1}$$
+    2. 谱分解：$$L= U\left(\begin{matrix}\lambda_1 & \\\\&\ddots \\\\ &&\lambda_n \end{matrix}\right) U^{-1}$$
         1. $U=(\vec{u_1},\vec{u_2},\cdots,\vec{u_n})$，是列向量为单位特征向量的矩阵，也就说$\vec{u_l}$是列向量。
-        2. $\left(\begin{matrix}\lambda_1 & \\&\ddots \\ &&\lambda_n \end{matrix}\right)$是n个特征值构成的对角阵。
-        3. 由于U是正交矩阵，即$UU^{T}=E$，所以特征分解又可以写成：$$L= U\left(\begin{matrix}\lambda_1 & \\&\ddots \\ &&\lambda_n \end{matrix}\right) U^{T}$$
+        2. $\left(\begin{matrix}\lambda_1 & \\\\&\ddots \\\\ &&\lambda_n \end{matrix}\right)$是n个特征值构成的对角阵。
+        3. 由于U是正交矩阵，即$UU^{T}=E$，所以特征分解又可以写成：$$L= U\left(\begin{matrix}\lambda_1 & \\\\ &\ddots \\\\ &&\lambda_n \end{matrix}\right) U^{T}$$
 
 
 <h3>6. 推广卷积Convolution到图卷积Graph Convolution</h3>
@@ -143,10 +143,10 @@
 1. 卷积定理：函数卷积的傅里叶变换是函数傅立叶变换的乘积，即$f \otimes g = F^{-1}\{F[f(t)] \cdot F[g(t)] \}$；
 2. 公式：图可以用矩阵表示（邻接矩阵，拉普拉斯矩阵），因此是离散卷积
     1. $(f*h)_G=U((U^Th)\odot (U^Tf))$，$\odot$表示hadamard product（哈达马积），对于两个向量，就是进行内积运算；对于维度相同的两个矩阵，就是对应元素的乘积运算。
-    2. $\hat g(\lambda_l) = \sum_{i=0}^{N-1} g(i)u_l^*(i) => \hat g = U^T g$是待设计卷积核g的图傅立叶变换GFT，将卷积核g的图傅立叶变换GFT写成对角矩阵形式： $$\left(\begin{matrix}\hat g(\lambda_0) & \\&\ddots \\ &&\hat g(\lambda_{N-1}) \end{matrix}\right)$$，则有$$(U^T f) \odot (U^T g) =  \left(\begin{matrix}\hat g(\lambda_0) & \\&\ddots \\ &&\hat g(\lambda_{N-1}) \end{matrix}\right)U^Tf$$，所以图信号f与卷积核g的卷积为$$(f \odot g)_G= U\left(\begin{matrix}\hat g(\lambda_0) & \\&\ddots \\ &&\hat g(\lambda_{N-1}) \end{matrix}\right) U^Tf = Ug_{\theta}(\land)U^T f = g_{\theta}(U \land U^T) f = g_{\theta}(L) f$$
+    2. $\hat g(\lambda_l) = \sum_{i=0}^{N-1} g(i)u_l^*(i) => \hat g = U^T g$是待设计卷积核g的图傅立叶变换GFT，将卷积核g的图傅立叶变换GFT写成对角矩阵形式： $$\left(\begin{matrix}\hat g(\lambda_0) & \\\\ &\ddots \\\\ &&\hat g(\lambda_{N-1}) \end{matrix}\right)$$，则有$$(U^T f) \odot (U^T g) =  \left(\begin{matrix}\hat g(\lambda_0) & \\\\ &\ddots \\\\ &&\hat g(\lambda_{N-1}) \end{matrix}\right)U^Tf$$，所以图信号f与卷积核g的卷积为$$(f \odot g)_G= U\left(\begin{matrix}\hat g(\lambda_0) & \\\\ &\ddots \\\\ &&\hat g(\lambda_{N-1}) \end{matrix}\right) U^Tf = Ug_{\theta}(\land)U^T f = g_{\theta}(U \land U^T) f = g_{\theta}(L) f$$
 3. **GCN中设计卷积核就是直接设计卷积核g的图傅立叶变换GFT**$g_{\theta}(\land)$
-    1. 第一代GCN，$g_{\theta}(\land) = \left(\begin{matrix}\theta_0 & \\&\ddots \\ && \theta_{N-1} \end{matrix}\right)$
-    2. 第二代GCN，$$g_{\theta}(\land) = \left(\begin{matrix} \sum_{j=0}^{K-1} \theta_j \lambda_0^j & \\&\ddots \\&& \sum_{j=0}^{K-1} \theta_j \lambda_l^j \\&&&\ddots \\&&&& \sum_{j=0}^{K-1} \theta_j \lambda_{N-1}^j \end{matrix}\right)$$
+    1. 第一代GCN，$g_{\theta}(\land) = \left(\begin{matrix}\theta_0 & \\\\ &\ddots \\\\ && \theta_{N-1} \end{matrix}\right)$
+    2. 第二代GCN，$$g_{\theta}(\land) = \left(\begin{matrix} \sum_{j=0}^{K-1} \theta_j \lambda_0^j & \\\\ &\ddots \\\\ && \sum_{j=0}^{K-1} \theta_j \lambda_l^j \\\\ &&&\ddots \\\\ &&&& \sum_{j=0}^{K-1} \theta_j \lambda_{N-1}^j \end{matrix}\right)$$
 
 + Q1-什么是[谱图理论spectral graph theory](http://www.math.ucsd.edu/~fan/research/revised.html)?：**借助于图的拉普拉斯矩阵的特征值和特征向量来研究图的性质**
 + Q2-GCN为什么要利用Spectral graph theory？：将图卷积从空间域变换到谱域，便于分析图与GCN设计
