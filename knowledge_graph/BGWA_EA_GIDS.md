@@ -95,6 +95,8 @@
         2. **RNN是在时间上（顺序上）共享参数**；
         3. ![](media/15561991698780.jpg)
 5. RNN训练：反传Back Propagation Through Time(BPTT)
+        1. [循环神经网络RNN 梯度推导(BPTT)](https://ilewseu.github.io/2017/12/30/RNN%E7%AE%80%E5%8D%95%E6%8E%A8%E5%AF%BC/)
+        2. [Deep Learning 学习笔记7：矩阵求导公式汇总](https://blog.csdn.net/WPR1991/article/details/82929843)
 6. RNN架构：RNN并不是每一步都需要输入/输出，根据输入输出可以将RNN分成几种架构：
     1. 常用架构：图1是普通的单个神经网络，图2是把单一输入转化为序列输出。 图3是把序列输入转化为单个输出 图4是把序列转化为序列，也就是seq2seq的做法。 图5是无时差的序列到序列转化，可以作为普通得语言模型；![](media/15561995418176.jpg)
     2. **1 to N**:输入向量，输出序列。分两种情况
