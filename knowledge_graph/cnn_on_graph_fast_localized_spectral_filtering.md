@@ -164,5 +164,3 @@
 1. [如何理解 Graph Convolutional Network（GCN）？](https://www.zhihu.com/question/54504471/answer/332657604)
 2. [spectral graph theory](http://www.math.ucsd.edu/~fan/research/revised.html)
 
-<script type="text/javascript"
-src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
