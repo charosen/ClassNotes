@@ -57,7 +57,7 @@
 
     6. 本文/第二代GCN--[Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](https://link.zhihu.com/?target=http%3A//papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering)
         1. 多项式参数化局部卷积核：
-            1. 参数$\theta$取值约束为K阶多项式的值$$ \begin{aligned} g_\theta(\Lambda) = \left( \begin{matrix} \sum_{j=0}^K \theta_j \lambda^j_0 &\\ &\ddots \\ &&\sum_{j=0}^K \theta_j \lambda^j_{N-1} \end{matrix}\right) =  \sum_{j=0}^K \theta_j \Lambda^j \end{aligned}$$
+            1. 参数$\theta$取值约束为K阶多项式的值$$ \begin{aligned} g_\theta(\Lambda) = \left( \begin{matrix} \sum_{j=0}^K \theta_j \lambda^j_0 &\\\\ &\ddots \\\\ &&\sum_{j=0}^K \theta_j \lambda^j_{N-1} \end{matrix}\right) =  \sum_{j=0}^K \theta_j \Lambda^j \end{aligned}$$
             2. 神经网络公式：$$\begin{aligned} y_{output} &= \sigma \left(U  g_\theta(\Lambda)  U^T x \right) \\ &= \sigma \left(U  \sum_{j=0}^K \theta_j \Lambda^j  U^T x \right) \\ &= \sigma \left( \sum_{j=0}^K \theta_j  U \Lambda^j  U^T x \right) \\ &= \sigma \left( \sum_{j=0}^K \theta_j L^j x \right) \\ &= \sigma \left( g_\theta(L) x \right) \end{aligned}$$
                 1. 对于拉普拉斯矩阵L有如下性质，任意两节点i，j的最短路径大于k时，即$\forall d_G(i, j) > k$，则$(L^k)_{i,j} = 0, where d_G(i,j)$是i，j节点的最短路径
                 2. 当k=1时，卷积输出为各节点与其1-hop邻居节点的卷积结果...以此类推![](media/15581885227710.jpg)
