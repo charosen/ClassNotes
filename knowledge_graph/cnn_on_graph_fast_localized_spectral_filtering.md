@@ -59,6 +59,10 @@
         1. 多项式参数化局部卷积核：
             1. 参数$\theta$取值约束为K阶多项式的值$$g_\theta(\Lambda)=\left(\begin{matrix}\sum_{j=0}^K \theta_j \lambda^j_0 &\\&\ddots \\ && \sum_{j=0}^K \theta_j \lambda^j_{N-1} \end{matrix}\right) =  \sum_{j=0}^K \theta_j \Lambda^j$$
             2. 神经网络公式：$$y_{output}=\sigma \left(U  g_\theta(\Lambda)  U^T x \right) = \sigma \left(U  \sum_{j=0}^K \theta_j \Lambda^j  U^T x \right) = \sigma \left( \sum_{j=0}^K \theta_j  U \Lambda^j  U^T x \right) = \sigma \left( \sum_{j=0}^K \theta_j L^j x \right) = \sigma \left( g_\theta(L) x \right) $$
+                1. 对于拉普拉斯矩阵L有如下性质，任意两节点i，j的最短路径大于k时，即$\forall d_G(i, j) > k$，则$(L^k)_{i,j} = 0, where d_G(i,j)$是i，j节点的最短路径
+                2. 当k=1时，卷积输出为各节点与其1-hop邻居节点的卷积结果...以此类推![](media/15581885227710.jpg)
+                3. 当k=i时，卷积输出为各节点与其i-hop邻居节点的卷积结果...![](media/15581885320260.jpg)
+                4. 因此，总的卷积输出为各节点与k-hop$(k \in [1, K])$邻居节点的所有卷积结果加权和，最远K跳，局部化
             3. 优点：
                 1. 不需要做特征分解，直接用拉普拉斯矩阵L计算卷积，仍需要计算$L^j$，计算复杂度还是$\mathcal{O}(n^2)$，但无需计算与存储正交特征向量基；
                 2. 卷积核的spatial localization很好，K就是卷积核的receptive field，每次卷积会将中心顶点K-hop neighbor上的feature进行加权求和，权系数就是$\theta_j$![](media/15581885227710.jpg)![](media/15581885320260.jpg)
@@ -74,7 +78,10 @@
         3. 使用Graclus multilevel clustering算法--该图粗化算法能够将节点数目近似减半
             1. 选择一个未标记节点i，匹配它的其中一个邻居节点j，该匹配使得local normalized cut最大，之后这两个节点被标记，并且其权重设置为它们权重之和不断重复匹配，直至所有节点都被标记
         4. 快速图池化--使用平衡二叉树数据结构rearrange节点使得图pooling变换为1维pooling，高效
-        5. 
+        5. ![](media/15581899899999.jpg)
+
+参考链接：
+1. [Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering)
 
     
 <h2>2. GCN小结</h2>
