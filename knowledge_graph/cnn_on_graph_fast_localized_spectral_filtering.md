@@ -48,7 +48,7 @@
             1. 之前提出的spectral domain的卷积不是局部的，且计算复杂度为$O(n^2)$；
     4. 关于图傅立叶变换和图卷积的内容，请参考下述GCN小结
     5. 第一代GCN--[Spectral Networks and Locally Connected Networks on Graphs](https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1312.6203)
-        1. 将卷积核g的图傅立叶变换GFT$g_{\theta}(\lambda)$设计成自由卷积核，参数$\theta$在空间中无约束取值$$ g_\theta(\land) = \left(\begin{array}{ccc} \theta_0 \\\\ &\ddots & \\\\ &&\theta_{N-1} \end{array}\right) $$
+        1. 将卷积核g的图傅立叶变换GFT$g_{\theta}(\lambda)$设计成自由卷积核，参数$\theta$在空间中无约束取值$$ g_\theta(\land) = \left(\begin{array}{ccc} \theta_0 \\ & \ddots & \\ & & \theta_{N-1} \end{array}\right) $$
         2. 神经网络公式：$$y_{output}=\sigma \left(U g_\theta(\Lambda) U^T x \right)$$
         3. 弊端：
             1. 需要计算拉普拉斯矩阵特征分解，即计算与存储正交特征向量基U，计算$U,diag(\theta_l )$及$U^T$三者的矩阵乘积的计算复杂度为$O(n^2)$，存储复杂度为$O(n^2)$；
