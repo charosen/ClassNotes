@@ -42,10 +42,10 @@ $$R_i(e_h, e_t, sentences) = f\{Entity(e_h), Entity(e_t), Sentence(sentence, ...
 2. Baseline模型
     1. 本质就是PCNN+ATT模型，注意力机制做了简化，使用了self-attention(Lin et al. 2017)[A Structured Self-Attentive Sentence Embedding 论文阅读](https://zhuanlan.zhihu.com/p/47226281)；
 3. SEE模型介绍
-    1. Baseline模型只利用了词序列的信息，最近研究发现，句法结构可以探索词间依赖关系，进一步辅助关系抽取。不像先前研究只关注于最短依赖路径，SEE模型使用依存树上以实体节点为根节点的子树来编码syntax-aware context of entities；
+    1. Baseline模型只利用了词序列的信息，最近研究发现，句法结构可以探索词间依赖关系，进一步辅助关系抽取。不像先前研究只关注于最短依赖路径，**SEE模型使用依存树上以实体节点为根节点的子树来编码syntax-aware context of entities**；
     2. 实体嵌入--给定句子与其parse tree，编码得到两个实体的密集向量；
-        1. 循环神经网络可以有效的编码树形结构，受Tai, Socher, and Manning (2015)启发，SEE使用基于注意力的树状GRU，以自底向上的顺序，从实体的依赖子树上编码出其实体上下文嵌入下图展示基于注意力的tree-GRU的结构，每个GRU节点包含两个输入：$x_i$（由词嵌入、位置嵌入、依存嵌入组成）和$h_{ch(i)}$（所有子节点$ch(i)$的hidden向量的加权求和）；![](media/15570631744268.jpg)
-        2. **依赖嵌入dependency embedding**：在所有依存树上下文上编码head-modifier word pair，依赖嵌入可以表示比词嵌入更丰富的语义，特别是长距离信息，依赖嵌入学习方法如下：
+        1. 循环神经网络可以有效的编码树形结构，受Tai, Socher, and Manning (2015)启发，**SEE使用基于注意力的树状GRU，以自底向上的顺序，从实体的依赖子树上编码出其实体上下文嵌入**，下图展示基于注意力的tree-GRU的结构，每个GRU节点包含两个输入：$x_i$（由词嵌入、位置嵌入、依存嵌入组成）和$h_{ch(i)}$（所有子节点$ch(i)$的hidden向量的加权求和）；![](media/15570631744268.jpg)
+        2. **依赖嵌入dependency embedding**：**在所有依存树上下文上编码head-modifier word pair**，依赖嵌入可以表示比词嵌入更丰富的语义，特别是长距离信息，**依赖嵌入学习方法**如下：
             1. 首先，使用off-shelf Stanford Parser来解析NYT语料；
             2. 其次，给定一个father-child依赖$p \rightarrow c$，使用skip-gram模型预测其所有上下文依赖，上下文依赖定义如下：
                 1. 所有祖父节点到父节点的head-modifier word pair
@@ -60,13 +60,22 @@ $$R_i(e_h, e_t, sentences) = f\{Entity(e_h), Entity(e_t), Sentence(sentence, ...
         1. 实例集中第i个实例的头、尾实体嵌入：
             1. ![](media/15570682423041.jpg)
             2. ![](media/15570682806005.jpg)
-        2. 整个实体集的所有句子嵌入、头实体嵌入、尾实体嵌入：
+        2. 给定实体对的实例集的所有句子嵌入、头实体嵌入、尾实体嵌入：
             1. ![](media/15570683355824.jpg)
         3. 实体嵌入上的注意力机制：也是使用self-attention
         4. 串接策略CAT：简单串接句子嵌入、头实体嵌入、尾实体嵌入，并用于计算关系表示![](media/15570685880164.jpg)
-        5. TRANS策略：受Trans系列嵌入的启发，讲实体嵌入的差向量作为关系类型嵌入，并进一步经过线性变换得到基于SEE的关系分数向量relation score vector：![](media/15570689276164.jpg)
-        6. 最终，综合句子嵌入得到的关系分数向量和SEE得到的关系分数向量：![](media/15570690506562.jpg)
+        5. TRANS策略：受Trans系列嵌入的启发，将实体嵌入的差向量作为关系类型嵌入，并进一步经过线性变换得到基于SEE的关系分数向量relation score vector：![](media/15570689276164.jpg)
+        6. 最终，综合句子嵌入得到的关系分数向量和SEE得到的关系分数向量计算得到关系表示，并经过softmax得到输出：![](media/15570690506562.jpg)
 4. 实验：
+    1. 数据集：Riedel2010
+    2. evaluation metrics:
+        1. held-outevaluation--precision-recall curves;
+            1. ![](media/15571304994733.jpg)
+
+        2. manual evaluation--Top-N precision P@N;
+            1. ![](media/15571304555305.jpg)
+            2. ![](media/15571304722564.jpg)
+
 
 
 
