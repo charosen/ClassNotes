@@ -48,7 +48,7 @@
             1. 之前提出的spectral domain的卷积不是局部的，且计算复杂度为$O(n^2)$；
     4. 关于图傅立叶变换和图卷积的内容，请参考下述GCN小结
     5. 第一代GCN--[Spectral Networks and Locally Connected Networks on Graphs](https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1312.6203)
-        1. 将卷积核g的图傅立叶变换GFT$g_{\theta}(\lambda)$设计成自由卷积核，参数$\theta$在空间中无约束取值$$g_\theta(\land)=\left(\begin{matrix}\theta_0 &\\&\ddots \\ &&\theta_{N-1} \end{matrix}\right)$$
+        1. 将卷积核g的图傅立叶变换GFT$g_{\theta}(\lambda)$设计成自由卷积核，参数$\theta$在空间中无约束取值$$ g_\theta(\land) = \left(\begin{matrix} \theta_0 & \\ & \ddots \\ && \theta_{N-1} \end{matrix}\right)$$
         2. 神经网络公式：$$y_{output}=\sigma \left(U g_\theta(\Lambda) U^T x \right)$$
         3. 弊端：
             1. 需要计算拉普拉斯矩阵特征分解，即计算与存储正交特征向量基U，计算$U,diag(\theta_l )$及$U^T$三者的矩阵乘积的计算复杂度为$O(n^2)$，存储复杂度为$O(n^2)$；
@@ -146,7 +146,7 @@
     2. $\hat g(\lambda_l) = \sum_{i=0}^{N-1} g(i)u_l^*(i) => \hat g = U^T g$是待设计卷积核g的图傅立叶变换GFT，将卷积核g的图傅立叶变换GFT写成对角矩阵形式： $$\left(\begin{matrix}\hat g(\lambda_0) & \\&\ddots \\ &&\hat g(\lambda_{N-1}) \end{matrix}\right)$$，则有$$(U^T f) \odot (U^T g) =  \left(\begin{matrix}\hat g(\lambda_0) & \\&\ddots \\ &&\hat g(\lambda_{N-1}) \end{matrix}\right)U^Tf$$，所以图信号f与卷积核g的卷积为$$(f \odot g)_G= U\left(\begin{matrix}\hat g(\lambda_0) & \\&\ddots \\ &&\hat g(\lambda_{N-1}) \end{matrix}\right) U^Tf = Ug_{\theta}(\land)U^T f = g_{\theta}(U \land U^T) f = g_{\theta}(L) f$$
 3. **GCN中设计卷积核就是直接设计卷积核g的图傅立叶变换GFT**$g_{\theta}(\land)$
     1. 第一代GCN，$g_{\theta}(\land) = \left(\begin{matrix}\theta_0 & \\&\ddots \\ && \theta_{N-1} \end{matrix}\right)$
-    2. 第二代GCN，$g_{\theta}(\land) = \left(\begin{matrix} \sum_{j=0}^{K-1} \theta_j \lambda_0^j & \\&\ddots \\&& \sum_{j=0}^{K-1} \theta_j \lambda_l^j \\&&&\ddots \\&&&& \sum_{j=0}^{K-1} \theta_j \lambda_{N-1}^j \end{matrix}\right)$
+    2. 第二代GCN，$$g_{\theta}(\land) = \left(\begin{matrix} \sum_{j=0}^{K-1} \theta_j \lambda_0^j & \\&\ddots \\&& \sum_{j=0}^{K-1} \theta_j \lambda_l^j \\&&&\ddots \\&&&& \sum_{j=0}^{K-1} \theta_j \lambda_{N-1}^j \end{matrix}\right)$$
 
 + Q1-什么是[谱图理论spectral graph theory](http://www.math.ucsd.edu/~fan/research/revised.html)?：**借助于图的拉普拉斯矩阵的特征值和特征向量来研究图的性质**
 + Q2-GCN为什么要利用Spectral graph theory？：将图卷积从空间域变换到谱域，便于分析图与GCN设计
