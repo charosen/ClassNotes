@@ -1,6 +1,9 @@
 <h1>知识图谱理论篇(十一) --论文阅读Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering
 </h1>
 
+
+
+
 <h2>1. 论文阅读---“Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering
 ”</h2>
 
@@ -160,3 +163,6 @@
 参考链接：
 1. [如何理解 Graph Convolutional Network（GCN）？](https://www.zhihu.com/question/54504471/answer/332657604)
 2. [spectral graph theory](http://www.math.ucsd.edu/~fan/research/revised.html)
+
+<script type="text/javascript"
+src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
