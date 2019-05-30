@@ -12,7 +12,7 @@
 
 1. CNN在处理欧式数据/网格数据，许多任务上性能多么多么好，但是不能处理非欧数据
 2. 图神经网络GNN的发展
-    1. 早期的工作使用RNN来学习**有向无环图**的特征表示。2005 年和 2009 年提出了 GNN（Graph Neural Networks），作为 RNN 的泛化，可以直接处理更一般的图结构，比如**有环图、有向图、无向图**。GCN 包含了一个迭代过程，迭代时节点状态向前传播直至稳态equilibrium，后面使用一个神经网络来依据节点状态产生节点输出。Li et al., 2016使用了Cho et al., 2014提出的门控循环单元进行改进。
+    1. 早期的工作使用RNN来学习**有向无环图**的特征表示。2005 年和 2009 年提出了 GNN（Graph Neural Networks），作为 RNN 的泛化，可以直接处理更一般的图结构，比如**有环图、有向图、无向图**。GNN 包含了一个迭代过程，迭代时节点状态向前传播直至稳态equilibrium，后面使用一个神经网络来依据节点状态产生节点输出。Li et al., 2016使用了Cho et al., 2014提出的门控循环单元进行改进。
 3. 图卷积网络GCN的发展--将卷积应用于图数据
     1. 基于普方法的GCN
         1. 第一代GCN Bruna et al. (2014),--通过图拉普拉斯矩阵特征分解来定义谱域图卷积，需要大量计算与卷积核非空间局部
@@ -41,11 +41,16 @@
 
 为了在将输入特征变换到高维特征时获得充足的表现力，至少需要一个可学习的线性变换。为了到达这个目的，每个顶点都会使用一个共享参数的线性变换，参数为${\mathbf{W}} \in \mathbb{R}^{F’ \times F}$。然后在每个顶点上做一个 self-attention ——一个共享的attention机制$a : \mathbb{R}^{F’} \times \mathbb{R}^{F’} \rightarrow \mathbb{R}$来计算注意力系数 attention coefficients：$$\tag{1} e_{ij} = a(\mathbf{W} \vec{h}_i, \mathbf{W} \vec{h}_j)$$
 
-表示顶点j的特征对顶点i的重要性(importance)。在最一般的公式中，模型可以使每个顶点都注意其他所有顶点（与所有节点都存在边/注意力系数），扔掉所有的图结构信息。我们使用mask attention使得图结构可以注入到注意力机制中——我们只对顶点$j \in \mathcal{N_i}$计算$e_{ij}$，其中$\mathcal{N_i}$是顶点i在图中的一些邻居。在我们所有的实验中使用i的一阶邻居（包括i自身）。为了让系数在不同的顶点都可比(**归一化，在统一尺度下衡量系数的影响力**)，我们对所有的j使用 softmax 进行了归一化：$$\tag{2} \alpha_{ij} = \mathrm{softmax}_j (e_{ij}) = \frac{\exp{e_{ij}}}{\sum_{k \in \mathcal{N}_i} \exp{e_{ik}}}$$
+表示顶点j的特征对顶点i的重要性(importance)。在最一般的公式中，模型可以使每个顶点都注意其他所有顶点（与所有节点都存在边/注意力系数），扔掉所有的图结构信息。我们使用mask attention使得图结构可以注入到注意力机制中——我们只对顶点$j \in \mathcal{N_i}$计算$e_{ij}$，其中$\mathcal{N_i}$是顶点i在图中的一些邻居。在我们所有的实验中使用i的一阶邻居（包括i自身）。为了让系数在不同的顶点都可比(**归一化，在统一尺度下衡量系数的影响力**)，我们对所有的j使用 softmax 进行了归一化：
+
+$$\tag{2} \alpha_{ij} = \mathrm{softmax}_j (e_{ij}) = \frac{\exp{e_{ij}}}{\sum_{k \in \mathcal{N}_i} \exp{e_{ik}}}$$
+
 
 ![](media/15585788859123.jpg)
 
-在我们的实验中，注意力机制a是一个单层的前向传播网络，参数为权重向量$\vec{\text{a}} \in \mathbb{R}^{2F’}$，使用LeakyReLU作为非线性层（斜率𝛼=0.2）。整个合并起来，注意力机制计算出的系数（如图1左侧所示）公式为：$$\tag{3} \alpha_{ij} = \frac{ \exp{ ( \mathrm{LeakyReLU} ( \vec{\text{a}}^T [\mathbf{W} \vec{h}_i \Vert \mathbf{W} \vec{h}_j ] ))}}{\sum_{k \in \mathcal{N_i}} \exp{(\mathrm{LeakyReLU}(\vec{\text{a}}^T [\mathbf{W} \vec{h}_i \Vert \mathbf{W} \vec{h}_k]))}}$$
+在我们的实验中，注意力机制a是一个单层的前向传播网络，参数为权重向量$\vec{\text{a}} \in \mathbb{R}^{2F’}$，使用LeakyReLU作为非线性层（斜率𝛼=0.2）。整个合并起来，注意力机制计算出的系数（如图1左侧所示）公式为：
+
+$$\tag{3} \alpha_{ij} = \frac{ \exp{ ( \mathrm{LeakyReLU} ( \vec{\text{a}}^T [\mathbf{W} \vec{h}_i \Vert \mathbf{W} \vec{h}_j ] ))}}{\sum_{k \in \mathcal{N_i}} \exp{(\mathrm{LeakyReLU}(\vec{\text{a}}^T [\mathbf{W} \vec{h}_i \Vert \mathbf{W} \vec{h}_k]))}}$$
 
 其中$·^T$表示转置，||表示concatenation操作。
 
@@ -73,14 +78,69 @@ multi-head 图注意力层的聚合过程如图1右侧所示。
 
 <h3>3. Evaluation</h3>
 
+转导学习Transductive Learning和归纳学习Inductive Learning的参考材料：
+1. [如何理解 inductive learning 与 transductive learning?](https://www.zhihu.com/question/68275921?sort=created)
+2. [Transductive Learning vs Inductive Learning(注意区别转导学习、归纳学习与转导推理、归纳推理)](https://blog.csdn.net/wendox/article/details/50474264)
+
 实验部分请参考：
 1. [Graph Attention Networks](https://davidham3.github.io/blog/2018/07/13/graph-attention-networks/)
 2. [论文 | 图注意力网络 | GRAPH ATTENTION NETWORKS](https://www.jianshu.com/p/8078bf1711e7)
 
+论文在四个公开图数据集任务（转导学习transductive与归纳学习inductive）上对GAT模型与baseline模型进行了评估，评估发现GAT模型在四个公开数据集上部分达到states-of-the-art性能、部分与现有states-of-the-art模型性能相近。这部分将总结实验过程与结果，并对GAT提取的特征表示做一个定性分析。
+
+**3.1. 数据集**
+
+**Transductive learning** 使用三个标准的citation network benchmark数据集——Cora, Citeseer和Pubmed(Sen et al., 2008)——并遵循Yang et al., 2016的transductive实验设置experiment setup进行实验。这些数据集中，顶点表示文章，边（无向）表示引用。顶点特征为文章的BOW词包特征。每个顶点有一个类标签。我们允许使用每类标签仅20个顶点用于训练，但是，遵循trasnductive学习的设置，训练算法在训练过程中能使用所有的顶点特征。我们划分1000个节点构成测试集，用于评估模型的预测性，并划分500个顶点构成验证集（同Kipf & Welling 2017）。Cora数据集包含了2708个顶点，5429条边，7个类别，每个顶点1433个特征。Citeseer包含3327个顶点，4732条边，6类，每个顶点3703个特征。Pubmed数据集包含19717个顶点，44338条边，3类，每个顶点500个特征。
+
+**Inductive learning** 使用protein-protein interaction(PPI)数据集，这个数据集由不同的人体组织图构成（Zitnik & Leskovec, 2017）。数据集包含了20个图的训练集，2个图的验证集，2个图的测试集。关键的是，测试的图包含了训练时完全未见过的图。为了构建图，我们使用Hamilton et al., 2017预处理后的数据。平均每个图的顶点数为2372个。每个顶点有50个特征，分别由positional gene sets，motif gene sets and immunological signatures组成。根据从Molecular Signatures Database(Subramanian et al., 2005)收集的基因本体，每个顶点node sets有121个标签，由，一个顶点可以同时拥有多个标签。
+
+各个数据集的统计数据如下图
+![](media/15591183212786.jpg)
+
+**3.2. state-of-the-art性能的baseline模型**
+
+**transductive learning**下的state-of-the-art模型  对于transductive learning任务，我们对比了Kipf & Welling 2017的工作，以及其他的baseline。包括了label propagation(LP)(Zhu et al., 2003)，半监督嵌入(SemiEmb)(Weston et al., 2012)，manifold regulariization(ManiReg)(Belkin et al., 2006)，skip-gram based graph embeddings(DeepWalk)(Perozzi et al., 2014)，the iterative classification algorithm(ICA)(Lu & Getoor, 2003)和Planetoid(Yang et al., 2016)。我们也直接对比了GCN(Kipf & Welling 2017)，以及对比利用了高阶切比雪夫的图卷积模型(Defferrard et al., 2016)，还有Monti et al., 2016提出的MoNet。
+
+**Inductive learning**下的state-of-the-art模型  对于inductive learning任务，我们对比了Hamilton et al., 2017提出的四个不同的有监督的GraphSAGE inductive（归纳）方法。这些方法提供了在抽样邻居中聚合特征的各种方法：GraphSAGE-GCN（将图卷积操作扩展到inductive setting），GraphSAGE-mean（对特征向量的值取element-wise均值），GraphSAGE-LSTM（通过将邻居特征输入到LSTM进行聚合），GraphSAGE-pool（用一个共享的多层感知机对特征向量进行变换，然后使用element-wise取最大值）。其他的transductive方法要么在inductive中完全不合适，要么就认为顶点是逐渐加入到一个图中，使得他们不能在完全未见过的图上使用（如PPI数据集）。
+
+**3.3. 实验设置（模型设置）**
+
+**Transductive learning** 使用**两层**GAT模型，模型在Cora数据集上调优超参数，然后直接对Citeseer数据集上实验的模型重用相同的超参数。
+
++ 第一层包含K=8个attention head，每个attention head下计算得到F'=8个特征（总共64个特征），之后接一个指数线性单元（ELU）（Clevert et al., 2016）作为非线性单元。
++ 第二层用作分类：一个单个的attention head计算C个特征（其中C是类别的数量），之后用softmax激活。
++ 处理小训练集时，在模型上加正则化。在训练时，我们使用$L_2$正则化，正则比重为$\lambda$=0.0005。除此以外，两个层的输入，以及normalized attention coefficients上都使用了p=0.6的dropout(Srivastava et al., 2014)（也就是在每轮训练时，每个顶点只对其所有邻居的一个随机采样进行attention coefficient计算）。
++ 如Monti et al., 2016观察到的一样，我们发现Pubmed的训练集大小(60个样本)要求我们对GAT模型进行微调：我们使用K=8个attention head，加强了$L_2$正则至$\lambda$=0.001。除此以外，我们的结构都和Cora和Citeseer的一样。
 
 
+**Inductive learning** 使用三层GAT模型。
+
++ 前两层分别包含K=4个attention head，每个attention head计算F'=256个特征（总共1024个特征），然后使用ELU非线性激活函数。
++ 最后一层用于多类别分类：包含K=6个attention head，每个attention head计算121个特征，接着，取平均后使用logistic sigmoid激活。训练集充分大所以不需要使用$L_2$正则或dropout，但是我们在attentional layer间使用了skip connections(He et al., 2016)。训练batch size设置为2个图。为了严格的衡量出使用注意力机制的效果（与一个近似等价GCN的模型相比较，就是下面提到的constant-GAT），我们也提供了constant attention mechanism，$\alpha(x, y) = 1$，使用同样的GAT架构，并且每个邻居上都有相同的权重。
+
+两个模型都使用了Glorot初始化(Glorot & Bengio, 2010)，使用Adam SGD(Kingma & Ba, 2014)优化cross-entropy，Pubmed上初始学习率是0.01，其他数据集是0.005。 In both cases we use an early stopping strategy on both the cross-entropy loss and accuracy (transductive) or micro-F1 (inductive) score on the validation nodes, with a patience of 100 epochs1
+
+**3.4. 实验结果**
+
+对于transductive任务，我们提交了GAT经过100次迭代训练后在测试集上的平均分类精度（还有标准差），也延用（照搬）了Kipf & Welling., 2017和Monti et al., 2016的metrics（结果）。特别地，对于基于切比雪夫的GCN方法(Defferrard et al., 2016)，我们使用了实验结果最好的二阶和三阶卷积核。为了公平的评估注意力机制的性能，我们还评估了一个计算出64个隐含特征的GCN模型，并且尝试了ReLU和ELU激活，记录了100轮后更好的那个结果（GCN-64）（结果显示ReLU更好）。
+
+![](media/15591239796913.jpg)
 
 
+对于inductive任务，我们计算了GAT在两个从未见过的测试图上10次平均的micro-averaged F1 score结果，其他模型结果沿用了Hamilton et al., 2017的metrics。特别地，因为我们的方法是监督的，我们对比了有监督的GraphSAGE。为了评估聚合所有的邻居的优点，我们还提供了我们通过修改架构（三层GraphSAGE-LSTM分别计算[512, 512, 726]个特征，128个特征用来聚合邻居）所能达到的GraphSAGE最好的结果（GraphSAGE）。最后，为了公平的评估注意力机制对比GCN这样的聚合方法，我们记录了我们的constant attention GAT模型的10轮结果（Const-GAT）。
+
+结果展示出我们的方法在四个数据集上都达到或接近state-of-the-art水平，和预期一致，如2.2节讨论的那样。具体来说，在Cora和Citeseer上我们的模型上升了1.5%和1.6%，推测应该是给邻居分配不同的权重起到了效果。值得注意的是在PPI数据集上：我们的GAT模型对于最好的GraphSAGE结果提升了20.5%，这意味着我们的模型可以应用到inductive上，通过观测所有的邻居，模型会有更强的预测能力。此外，针对Const-GAT也提升3.9%，再一次展现出给不同的邻居分配不同的权重的巨大提升。
+
+学习到的特征表示的有效性可以定性分析——我们提供了t-SNE(Maaten & Hinton, 2008)的可视化——我们对在Cora上面预训练的GAT模型中第一层的输出做了变换（图2）。representation在二维空间中展示出了可辩别的簇。注意，这些簇对应了数据集的七个类别，验证了模型在Cora上对七类的判别能力。此外，我们可视化了归一化的attention系数（对所有的8个attention head取平均）的相对强度。像Bahdanau et al., 2015那样适当的解释这些系数需要更多的领域知识，我们会在未来的工作中研究。
+
+![](media/15592239839819.jpg)
+
+
+<h3>4. 结论</h3>
+
+我们展示了图注意力网络(GAT)，新的卷积风格神经网络，利用masked self-attentional层。图注意力网络计算高效（不需要耗时的矩阵操作，在图中的顶点上并行计算），处理不同数量的邻居时对邻居中的不同顶点赋予不同的重要度，不需要依赖整个图的结构信息——因此解决了之前提出的基于谱的方法的问题。我们的这个利用attention的模型在4个数据集针对transductive和inductive（特别是对完全未见过的图），对顶点分类成功地达到了state-of-the-art的performance。
+
+未来在图注意力网络上有几点可能的改进与扩展，比如解决2.2节描述的处理大批数据时的实际问题。还有一个有趣的研究方向是利用attention机制对我们的模型进行一个深入的解释。此外，扩展我们的模型从顶点分类到图分类也是一个更具应用性的方向。最后，扩展我们的模型到整合边的信息（可能制视了顶点关系）可以处理更多的问题。
 
 
  
