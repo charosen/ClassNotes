@@ -1,4 +1,4 @@
-<h1>知识图谱理论篇(十二) --论文阅读SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS
+<h1>知识图谱理论篇(十二) --论文阅读SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS  
 </h1>
 
 ICLR 2017。使用谱图理论的图卷积中很重要的一篇论文，提升了图卷积的性能，使用切比雪夫多项式的1阶近似完成了高效的图卷积架构。
@@ -42,10 +42,22 @@ $$\tag{2} H^{(l+1)} = \sigma(\tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\fra
 其中，
 + $\tilde{A} = A + I_N$是无向图$\mathcal{G}$带自环/自连接的邻接矩阵
 + $I_N$是单位阵
-+ $\tilde{D}_{ii} = \sum_j \tilde{A}_{ij}$是带自环无向图的度矩阵
-+ $W^{(l)}$是层训练的权重矩阵
++ $\tilde{D}$是带自环无向图的度矩阵，其中$\tilde{D}_{ii} = \sum_j \tilde{A}_{ij}$
++ $W^{(l)} \in \mathbb{R}^{D \times F}$是层训练的权重矩阵，F个卷积核
 + $\sigma(\cdot)$是非线性激活函数
 + $H^{(l)} \in \mathbb{R}^{N \times D}$是第𝑙层的激活矩阵，$H^{(0)} = X$
+
+上述公式为矩阵形式的公式，下面介绍每一个节点的传播公式
+
+$$\tag{3} H^{(l+1)}_i = \sigma(\sum_{j \in N(i)}\frac{\tilde{A}_{i,j}}{\tilde{D}^{-\frac{1}{2}}_{i,i}  \tilde{D}^{-\frac{1}{2}}_{j,j}} H^{(l)}_j W^{(l)})$$
+
++ $\tilde{A}_{i, j}$是无向图$\mathcal{G}$带自环/自连接的邻接矩阵$\tilde{A} = A + I_N$的元素，无权图则为0或者1；
++ $I_N$是单位阵
++ $\tilde{D}$是带自环无向图的度矩阵，其中$\tilde{D}_{ii} = \sum_j \tilde{A}_{ij}$
++ $W^{(l)} \in \mathbb{R}^{D \times F}$是层训练的权重矩阵，F个卷积核
++ $H^{(l)}_j \in \mathbb{R}^{D}$是第l层的第j个节点的激活向量/特征向量
++ $H^{(l+1)}_i \in \mathbb{R}^{D}$是第l+1层的第i个节点的激活向量/特征向量
+
 
 接下来介绍基于谱图理论的GCN的相关工作和论文提出的GCN的理论推导：
 
