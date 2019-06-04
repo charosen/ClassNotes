@@ -42,18 +42,18 @@ $$\tag{2} H^{(l+1)} = \sigma(\tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\fra
 其中，
 + $\tilde{A} = A + I_N$是无向图$\mathcal{G}$带自环/自连接的邻接矩阵
 + $I_N$是单位阵
-+ $\tilde{D}$是带自环无向图的度矩阵，其中$\tilde{D}_{ii} = \sum_j \tilde{A}_{ij}$
++ $\tilde{D}$是带自环无向图的度矩阵，其中$\tilde{D}_{i,i} = \sum_j \tilde{A}_{i,j}$
 + $W^{(l)} \in \mathbb{R}^{D \times F}$是层训练的权重矩阵，F个卷积核
 + $\sigma(\cdot)$是非线性激活函数
 + $H^{(l)} \in \mathbb{R}^{N \times D}$是第𝑙层的激活矩阵，$H^{(0)} = X$
 
 上述公式为矩阵形式的公式，下面介绍每一个节点的传播公式
 
-$$\tag{3} H^{(l+1)}_i = \sigma(\sum_{j \in N(i)}\frac{\tilde{A}_{i,j}}{\tilde{D}^{-\frac{1}{2}}_{i,i}  \tilde{D}^{-\frac{1}{2}}_{j,j}} H^{(l)}_j W^{(l)})$$
+$$\tag{3} H^{(l+1)}_{i} = \sigma ( \sum_{j \in N(i)} \frac{ \tilde{A}_{i,j}}{ \tilde{D}^{- \frac{1}{2}}_{i,i}  \tilde{D}^{- \frac{1}{2}}_{j,j}} H^{(l)}_j W^{(l)})$$
 
 + $\tilde{A}_{i, j}$是无向图$\mathcal{G}$带自环/自连接的邻接矩阵$\tilde{A} = A + I_N$的元素，无权图则为0或者1；
 + $I_N$是单位阵
-+ $\tilde{D}$是带自环无向图的度矩阵，其中$\tilde{D}_{ii} = \sum_j \tilde{A}_{ij}$
++ $\tilde{D}$是带自环无向图的度矩阵，其中$\tilde{D}_{i,i} = \sum_j \tilde{A}_{i,j}$
 + $W^{(l)} \in \mathbb{R}^{D \times F}$是层训练的权重矩阵，F个卷积核
 + $H^{(l)}_j \in \mathbb{R}^{D}$是第l层的第j个节点的激活向量/特征向量
 + $H^{(l+1)}_i \in \mathbb{R}^{D}$是第l+1层的第i个节点的激活向量/特征向量
@@ -65,12 +65,12 @@ $$\tag{3} H^{(l+1)}_i = \sigma(\sum_{j \in N(i)}\frac{\tilde{A}_{i,j}}{\tilde{D}
     1. [Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering](https://github.com/charosen/ClassNotes/blob/master/knowledge_graph/cnn_on_graph_fast_localized_spectral_filtering.md)
     2. [论文笔记：SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS](https://blog.csdn.net/qq_41727666/article/details/84640549)
 2. layer-wise linear model
-    1. 第二代GCN定义的卷积公式如下$\tag{4} g_\theta’ \approx \sum^K_{k=0} \theta’_k T_k(\tilde{\Lambda})$，其中$\tilde{\Lambda} = \frac{2}{\lambda_{max}} \Lambda - I_N$，$\lambda_{max}$表示L的最大特征值，而第二代GCN就是通过堆叠上述卷积层实现神经网络的；
+    1. 第二代GCN定义的卷积公式如下$\tag{4} g_{\theta}^{'} \approx \sum^K_{k=0} {\theta}_k^{'} T_k(\tilde{\Lambda})$，其中$\tilde{\Lambda} = \frac{2}{\lambda_{max}} \Lambda - I_N$，$\lambda_{max}$表示L的最大特征值，而第二代GCN就是通过堆叠上述卷积层实现神经网络的；
     2. 现在**假设K=1**，则图卷积关于拉普拉斯矩阵L是线性的，因此在是图拉普拉斯谱上的线性函数。
     3. **假设$\lambda_{max}$近似等于2**，我们预测神经网络参数可以在训练中适应这个变化。**（why）**，综上近似简化图卷积公式：$\tag{6} g_\theta’ \ast x \approx \theta’_0x + \theta’_1 (L - I_N)x = \theta’_0x - \theta’_1 D^{-\frac{1}{2}} A D^{-\frac{1}{2}} x$
     4. **进一步假设$\theta_0 = - \theta_1 = \theta$**，减少参数数量，防止过拟合；
     5. 综上，一阶近似图卷积公式$\tag{7} g_\theta \ast x \approx \theta(I_N + D^{-\frac{1}{2}} A D^{-\frac{1}{2}}) x$
-        1. 注意$I_N + D^{-\frac{1}{2}} A D^{-\frac{1}{2}}$的特征值范围在[0, 2]之间，在深层模型中重复应用这个操作会导致数值不稳定和梯度爆炸、消失的现象。为了减轻这个问题，我们引入了如下的重新正则化技巧：$I_N + D^{-\frac{1}{2}} A D^{-\frac{1}{2}} \to \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\frac{1}{2}}$，$\tilde{A} = A + I_N$，$\tilde{D}_{ii} = \sum_j \tilde{A}_{ij}$
+        1. 注意$I_N + D^{-\frac{1}{2}} A D^{-\frac{1}{2}}$的特征值范围在[0, 2]之间，在深层模型中重复应用这个操作会导致数值不稳定和梯度爆炸、消失的现象。为了减轻这个问题，我们引入了如下的重新正则化技巧：$I_N + D^{-\frac{1}{2}} A D^{-\frac{1}{2}} \to \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\frac{1}{2}}$，$\tilde{A} = A + I_N$，$\tilde{D}_{i,i} = \sum_j \tilde{A}_{i,j}$
     6. 将一阶近似图卷积公式推广到C个输入通道的信号$X \in \mathbb{R}^{N \times C}$，和F个滤波器：$\tag{8} Z = \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\frac{1}{2}} X \Theta$
         1. $\Theta \in \mathbb{R}^{C \times F}$是滤波器参数矩阵
         2. $Z \in \mathbb{R}^{N \times F}$是卷积后的信号矩阵
