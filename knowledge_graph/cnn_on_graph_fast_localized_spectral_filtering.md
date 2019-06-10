@@ -1,7 +1,7 @@
 <h1>知识图谱理论篇(十一) --论文阅读Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering
 </h1>
 
-<h2>1. 论文阅读---“Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering
+<h2>1. 论文阅读---“Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering（2016）
 ”</h2>
 
 <h3>1. abstract</h3>

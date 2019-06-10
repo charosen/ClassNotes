@@ -2,6 +2,11 @@
 
 <h2>1. 论文阅读---“GRAPH ATTENTION NETWORKS”(ICLR 2018)</h2>
 
+参考链接：
+1. [Graph Attention Networks](https://davidham3.github.io/blog/2018/07/13/graph-attention-networks/)
+2. [论文 | 图注意力网络 | GRAPH ATTENTION NETWORKS](https://www.jianshu.com/p/8078bf1711e7)
+3. [Graph Attention Network的本质是什么？](https://www.zhihu.com/question/275866887)
+
 <h3>0. abstract</h3>
 
 1. 提出**图注意力网络graph attention networks**，该网络直接**作用于图**结构**数据**，利用**自注意力层使得节点会自注意其所有邻居节点特征**，解决基于图卷积或图卷积近似的先前模型的缺点；
