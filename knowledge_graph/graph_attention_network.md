@@ -148,4 +148,171 @@ multi-head 图注意力层的聚合过程如图1右侧所示。
 未来在图注意力网络上有几点可能的改进与扩展，比如解决2.2节描述的处理大批数据时的实际问题。还有一个有趣的研究方向是利用attention机制对我们的模型进行一个深入的解释。此外，扩展我们的模型从顶点分类到图分类也是一个更具应用性的方向。最后，扩展我们的模型到整合边的信息（可能制视了顶点关系）可以处理更多的问题。
 
 
- 
+<h2>5. 论文复现---“GRAPH ATTENTION NETWORKS”(ICLR 2018)</h2>
+
+### 到底何为transductive learning & inductive learning？
+1. [Quora上的答案--What-is-the-difference-between-inductive-and-transductive-learning](https://www.quora.com/What-is-the-difference-between-inductive-and-transductive-learning)：无非就是利用了无标签数据的特征，transductive认为无标签的数据也能够为任务提供有利信息
+2. transductive & inductive这部分还是不太理解
+3. 对于gcn到底能不能用于inductive还是不太理解
+    1. ![](media/15634184224396.jpg)
+
+
+### 数据集：
+
+(transductive部分)
+
+沿用论文`SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS(kipf&welling ICLR2017)`中使用的preprocessed的cora, citeseer, pubmed**引文网络**数据集；
+
+当然，kipf&welling也是摘取论文`Revisiting Semi-Supervised Learning with Graph Embeddings. Zhilin Yang, William W. Cohen, Ruslan Salakhutdinov. ICML 2016.`中数据集的inductive部分，数据集的preprocessed工作就是这篇ICML 2016论文完成的；（怀疑这篇ICML把transductive和inductive概念弄反了）
+
+附上两篇论文的github链接，可以观察数据集：
+1. <https://github.com/tkipf/gcn/tree/master/gcn>
+2. <https://github.com/kimiyoung/planetoid>
+
+通过diff比较kipf&welling数据集和zhilin yang数据，发现inductive部分是完全一样的（kipf&welling就是沿用的zhilin yang的数据集）
+![](media/15634176663082.jpg)
+再diff比较kipf&welling数据集和GAT数据集（只提供了cora部分代码与数据集），发现cora数据是完全一样的（GAT就是沿用的kipf&welling的数据集）
+![](media/15634177523306.jpg)
+到这思路就很清晰了，使用kipf&welling数据集来复现GAT未开源的citeseer, pubmed部分代码；
+
+cora原始数据集
+1. 分析
+    1. cora.content: 论文id，论文词包特征，论文类别 <论文id> <特征> <标签>
+    2. cora.cite: 论文引用关系 <被引id><引用id>
+    3. README
+2. 特征
+    1. 数据集中论文至少引用或被引用一篇论文
+    2. 包含2708篇机器学习论文，分为7类
+    3. 词包BOW：去停止词，提取词干stemming，去除词频低于10的词，BOW最后包含1433个不同词
+
+preprocessed cora数据集
+1. 分析
+    1. ind.cora.allx：除测试数据的所有paper节点BOW的csr_matrix
+    2. ind.cora.ally：除测试数据的所有paper节点label的ndarray
+    3. ind.cora.graph：各paper id之间的连接关系（边）defautdict，dict of list
+    4. ind.cora.test.index：测试集paper节点id的纯文本文件
+    5. ind.cora.tx：1000个测试集paper节点BOW的csr_matrix
+    6. ind.cora.ty：1000个测试集paper节点label的ndarray
+    7. ind.cora.x：140个训练paper节点的BOW的csr_matrix
+    8. ind.cora.y：140个训练paper节点的label的ndarray
+2. 特征
+    1. 前140条为训练集，训练集各个类别数据为20条，141~(141+500)条为验证集（抛弃了原始数据集的paper id，用矩阵行索引作paper id）
+
+citeseer原始数据集（没下载到原始数据集，略）
+1. 特征
+    1. 测试集存在缺失节点
+    2. 包含3327篇论文，分为6类
+    3. 词包BOW：BOW包含3703个不同词
+
+preprocessed citeseer数据集
+1. 分析
+    1. ind.citeseer.allx：除测试数据的所有paper节点BOW的csr_matrix(由于citeseer存在缺失点，allx包含2312个节点，缺失点在测试集中)
+    2. ind.citeseer.ally：除测试数据的所有paper节点label的ndarray(由于citeseer存在缺失点，ally包含2312个节点，缺失点在测试集中)
+    3. ind.citeseer.graph：各paper id之间的连接关系（边）defautdict，dict of list
+    4. ind.citeseer.test.index：测试集paper节点id的纯文本文件
+    5. ind.citeseer.tx：1000个测试集paper节点BOW的csr_matrix（补全的测试集不止1000）
+    6. ind.citeseer.ty：1000个测试集paper节点label的ndarray（补全的测试集不止1000）
+    7. ind.citeseer.x：120个训练paper节点的BOW的csr_matrix
+    8. ind.citeseer.y：120个训练paper节点的label的ndarray
+2. 特征
+    1. 前120条为训练集，训练集各个类别数据为20条，141~(141+500)条为验证集（抛弃了原始数据集的paper id，用矩阵行索引作paper id），后1000条为测试集
+
+pubmed原始数据集（没下载到原始数据集，略）
+
+1. 特征
+    1. 存在孤立节点，无引用关系
+    2. 包含3327篇论文，分为6类
+    3. 词包BOW：BOW包含3703个不同词
+
+(inductive部分)
+
+
+图网络数据集参考链接：
+
+1. [数据集 | 图网络一般适用的数据集整理](https://www.jianshu.com/p/67137451b67f)
+2. [数据集Cora、Citeseer、DBLP](https://blog.csdn.net/YizhuJiao/article/details/83015702)
+
+### 数据预处理
+
+`load_data`：所有数据集都使用到的预处理函数，主要思路是
+
+1. 打开各个序列化存储在pickle文件中的对象：
+    1. x, allx, tx --> csr_matrix
+    2. y, ally, ty --> ndarray
+    3. graph --> dict_of_lists: adjacency matrix
+    4. ![](media/15635515677557.jpg)
+2. `parse_index_file`读取test.index纯文本文件中的测试集节点id到list test_idx_reorder中，排序得到test_idx_range
+    1. ![](media/15635517995724.jpg)
+    2. citeseer的测试集还缺失15个节点，需要补充上行零向量，保证测试集的节点索引与test.index文件中的索引是对应上的![](media/15635518590798.jpg)
+
+3. 堆叠测试集tx，ty和其余数据allx，ally形成完整数据集，并按顺序重新排序测试集（观察test.index会发现测试集顺序是被打乱的），得到features， labels
+4. 构建训练集、验证集、测试集mask，并用mask划分训练集、验证集、测试集
+
+`preprocess_features`：词包特征行归一化，每个节点的词包特征中出现的词数不一样，为了统一整个数据集中所有节点特征的影响，对每个节点特征作归一化
+
+1. 由于citeseer中补充了零向量，为了处理除零引入np.inf，将np.inf值更换为0向量
+    1. ![](media/15635527938531.jpg)
+2. 通过稀疏对角化，并使用矩阵左乘，实现行归一化
+3. ![](media/15635529182787.jpg)
+
+`adj_to_bias`：使用邻接矩阵（一跳邻居矩阵）通过邻接矩阵的k次幂构建k跳邻居矩阵，k次幂的每个非零元素置1，单纯表示邻居关系，并为0元素添加负无穷偏置，使其在softmax的指数函数作用下置0，不参与后续注意力归一化计算，保证只计算并归一化邻居节点的注意力
+1. 此函数只用于小图数据集cora、citeseer，使用在大图的数据集pubmed上，会很卡，且服务器上gpu内存会溢出，pubmed需要使用sparse版本的gat来解决内存占用过大问题
+2. ![](media/15635539055369.jpg)
+
+（大图的邻接矩阵处理函数）
+
+`preprocess_adj_bias`：由于sparseTensor接收indices, data, dense_shape参数，所以预处理函数返回的就是预处理邻接矩阵后得到的稀疏邻接矩阵的indices，data，dense_shape
+
+1. 邻接矩阵转换成scipy中的稀疏矩阵coo_matrix来获取row和col索引，用以构建indice坐标
+2. 但不知道为什么源码中对adj作了转置，即坐标变为(col, row)，作者还特意注释了这点，没理解到作者用意
+3. ![](media/15636406050541.jpg)
+
+
+
+### GAT模型（非稀疏版本，用于小图）
+
+架构：模型大概就是gat层的叠加
+
+![](media/15635557286455.jpg)
+
+非稀疏版本的gat层
+
+![](media/15635558140403.jpg)
+
+1. 模型使用1维卷积层实现全连接层，完成特征的线性变换
+    1. ![](media/15635567300584.jpg)
+
+2. 使用单层前向网络来实现注意力机制，a向量学习节点邻居间的重要型，并使用划分子向量来巧妙计算向量内积
+    1. ![](media/15635569607919.jpg)
+3. dropout
+    1. 对层输入使用dropout，减小神经元之间的共适应作用，防止过拟合
+    2. 对注意力系数dropout，实现masked attention
+    3. ![](media/15635572514902.jpg)
+
+
+### SpGAT模型（稀疏版本，用于大图）
+
+大图数据使用非稀疏版本GAT会报GPU内存溢出，无法为pubmed邻接矩阵分配内存
+
+![](media/15636407560760.jpg)
+
+测试前面提及的预处理函数`preprocess_adj_bias`为什么要(col, row)，与自己写的(row, col)版本比对测试
+
+1. (col, row)--avg 0.7750: 0.7710, 0.7630, 0.7770, 0.7840, 0.7720, 0.7870, 0.7710, 0.7790, 0.7690, 0.7870, 0.7689, 0.7709
+2. (row, col)--avg 0.7744: 0.7790, 0.7730, 0.7750, 0.7590, 0.7860, 0.7770, 0.7760, 0.7770, 0.7720, 0.7559, 0.7840, 0.7790
+3. 结果存在一些波动，但是影响不是很大
+
+不知为何sparse gat在pubmed上的准确度比论文提及的低1%，为测试sparse的影响，在所有数据集上测试稀疏版本与非稀疏版本性能
+
+1. cora:
+    1. sparse --avg 0.8305: 0.8319, 0.8289, 0.8319, 0.8319, 0.8280
+    2. non-sparse --avg 0.8349: 0.8309, 0.8439, 0.8349, 0.8319, 0.8329
+2. citeseer:
+    1. sparse --avg 0.71925: 0.7240, 0.7180, 0.7290, 0.7080, 0.7070, 0.7150, 0.7290, 0.7230,
+    2. non-sparse --avg 0.72405: 0.7229, 0.7230, 0.7260, 0.7220, 0.7260, 0.7129, 0.7359, 0.7240
+3. pubmed:
+    1. sparse: 0.7669, 0.7770, 0.7709
+
+### 实验效果
+
+待补充
